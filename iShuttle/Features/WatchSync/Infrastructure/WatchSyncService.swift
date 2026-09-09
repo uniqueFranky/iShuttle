@@ -17,7 +17,8 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
         session?.activate()
     }
 
-    func sync(_ reservations: [Reservation], maxCount: Int = 3, expirationInterval: TimeInterval = 600) {
+    @discardableResult
+    func sync(_ reservations: [Reservation], maxCount: Int = 3, expirationInterval: TimeInterval = 600) -> Int {
         logger.info("开始同步，reservations=\(reservations.count, privacy: .public)，maxCount=\(maxCount, privacy: .public)，expirationMinutes=\(expirationInterval / 60, privacy: .public)")
         let latest = reservations
             .filter { $0.departure.addingTimeInterval(expirationInterval) >= Date() && !($0.qrCodePayload ?? "").isEmpty }
@@ -25,7 +26,7 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
             .prefix(max(0, maxCount))
         if latest.isEmpty, !reservations.isEmpty {
             logger.info("存在预约但暂时没有二维码，保留 Watch 当前 context，不发送 clear")
-            return
+            return 0
         }
         let context: [String: Any]
         do {
@@ -46,7 +47,7 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
                 )
                 guard let data = try? JSONEncoder().encode(envelope) else {
                     logger.error("Watch transfer 编码失败")
-                    return
+                    return 0
                 }
                 logger.info("transfer 编码成功，bytes=\(data.count, privacy: .public)，count=\(transfers.count, privacy: .public)")
                 context = ["reservations": data]
@@ -59,7 +60,7 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
         guard let session, session.activationState == .activated else {
             logger.warning("session 尚未 activated，暂存 context，state=\(String(describing: self.session?.activationState), privacy: .public)")
             pendingContext = context
-            return
+            return latest.count
         }
         do {
             try session.updateApplicationContext(context)
@@ -69,6 +70,7 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
             logger.error("updateApplicationContext 失败：\(error.localizedDescription, privacy: .public)")
             pendingContext = context
         }
+        return latest.count
     }
 
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {

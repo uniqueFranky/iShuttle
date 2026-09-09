@@ -60,6 +60,16 @@ final class AppContainer: ObservableObject {
         watchSync.sync(cached, maxCount: maxCount, expirationInterval: reservationRepository.expirationInterval)
     }
 
+    func syncWatchData() async -> Int {
+        let currentSettings = settingsRepository.load()
+        let cached = await reservations.all()
+        return watchSync.sync(
+            cached,
+            maxCount: currentSettings.watchMaxReservationCount,
+            expirationInterval: currentSettings.watchExpirationMinutes * 60
+        )
+    }
+
     func updateThemeMode(_ themeMode: String) {
         var updated = settingsRepository.load()
         updated.themeMode = themeMode

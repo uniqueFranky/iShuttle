@@ -6,6 +6,8 @@ struct SettingsView: View {
     @State private var themeMode: String
     @State private var watchMaxReservationCount: Int
     @State private var watchExpirationMinutes: Double
+    @State private var isSyncingWatch = false
+    @State private var watchSyncMessage: String?
     @State private var showingLogoutConfirmation = false
 
     init(container: AppContainer) {
@@ -48,7 +50,27 @@ struct SettingsView: View {
                 }
 
                 Section("Apple Watch") {
-                    Stepper("最多同步车次：\(watchMaxReservationCount)", value: $watchMaxReservationCount, in: 1...10)
+                    Stepper("最大同步预约数量：\(watchMaxReservationCount)", value: $watchMaxReservationCount, in: 1...10)
+
+                    Button {
+                        Task {
+                            isSyncingWatch = true
+                            let count = await container.syncWatchData()
+                            isSyncingWatch = false
+                            watchSyncMessage = "已同步 \(count) 条预约"
+                            try? await Task.sleep(for: .seconds(2))
+                            watchSyncMessage = nil
+                        }
+                    } label: {
+                        HStack {
+                            Label("主动同步数据", systemImage: "arrow.triangle.2.circlepath")
+                            Spacer()
+                            if isSyncingWatch {
+                                ProgressView()
+                            }
+                        }
+                    }
+                    .disabled(isSyncingWatch)
                 }
 
 
@@ -61,6 +83,20 @@ struct SettingsView: View {
                 }
             }
             .navigationTitle("设置")
+            .overlay(alignment: .top) {
+                if let watchSyncMessage {
+                    Text(watchSyncMessage)
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(.primary)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                        .background(.regularMaterial, in: Capsule())
+                        .shadow(color: .black.opacity(0.15), radius: 8, y: 3)
+                        .padding(.top, 8)
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                }
+            }
+            .animation(.easeInOut(duration: 0.2), value: watchSyncMessage)
             .onChange(of: watchMaxReservationCount) { _, value in
                 Task { await container.updateWatchSettings(maxCount: value, expirationMinutes: watchExpirationMinutes) }
             }
