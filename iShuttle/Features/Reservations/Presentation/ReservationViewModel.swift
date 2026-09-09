@@ -6,6 +6,7 @@ final class ReservationViewModel: ObservableObject {
     @Published private(set) var buses: [BusOption] = []
     @Published private(set) var reservations: [Reservation] = []
     @Published private(set) var isLoading = false
+    @Published private(set) var operatingIDs: Set<String> = []
     @Published var errorMessage: String?
 
     private let service: ReservationService
@@ -56,6 +57,8 @@ final class ReservationViewModel: ObservableObject {
     }
 
     func reserve(_ bus: BusOption, calendar: Calendar) async {
+        operatingIDs.insert(bus.id)
+        defer { operatingIDs.remove(bus.id) }
         do {
             _ = try await service.reserve(bus, calendar: calendar)
             reservations = (try? await service.refreshReservations()) ?? reservations
@@ -65,12 +68,18 @@ final class ReservationViewModel: ObservableObject {
     }
 
     func cancel(_ reservation: Reservation) async {
+        operatingIDs.insert(reservation.id)
+        defer { operatingIDs.remove(reservation.id) }
         do {
             try await service.cancel(reservation)
             reservations = (try? await service.refreshReservations()) ?? []
         } catch {
             handle(error)
         }
+    }
+
+    func isOperating(_ id: String) -> Bool {
+        operatingIDs.contains(id)
     }
 
     private func handle(_ error: Error, reportErrors: Bool = true) {

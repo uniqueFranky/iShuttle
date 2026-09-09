@@ -19,7 +19,10 @@ struct MyReservationsView: View {
     var body: some View {
         NavigationStack {
             Group {
-                if viewModel.reservations.isEmpty && !viewModel.isLoading {
+                if viewModel.isLoading {
+                    ReservationLoadingView()
+                        .frame(maxWidth: .infinity, minHeight: 360)
+                } else if viewModel.reservations.isEmpty {
                     ContentUnavailableView("暂无预约", systemImage: "ticket")
                 } else {
                     List(viewModel.reservations) { reservation in
@@ -44,15 +47,19 @@ struct MyReservationsView: View {
                             Button(role: .destructive) {
                                 Task { await viewModel.cancel(reservation) }
                             } label: {
-                                Label("取消", systemImage: "trash")
+                                if viewModel.isOperating(reservation.id) {
+                                    ProgressView()
+                                } else {
+                                    Label("取消", systemImage: "trash")
+                                }
                             }
+                            .disabled(viewModel.isOperating(reservation.id))
                         }
                     }
                     .listStyle(.insetGrouped)
                 }
             }
             .navigationTitle("我的预约")
-            .overlay { if viewModel.isLoading { ProgressView() } }
             .task { await viewModel.refreshReservations() }
             .refreshable { await viewModel.refreshReservations() }
             .sheet(item: $selectedReservation) { reservation in
@@ -76,4 +83,3 @@ struct MyReservationsView: View {
         return formatter.string(from: date)
     }
 }
-
