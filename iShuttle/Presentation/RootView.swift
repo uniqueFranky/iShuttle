@@ -6,6 +6,7 @@ import UIKit
 final class AppContainer: ObservableObject {
     let session: URLSession
     let authService: AuthService
+    private let sessionRepository: any SessionRepository
     let reservationAPI: ReservationAPI
     let reservations = ReservationStore()
     var reservationRepository: any ReservationRepository
@@ -21,6 +22,7 @@ final class AppContainer: ObservableObject {
         configuration.httpShouldSetCookies = true
         configuration.httpCookieAcceptPolicy = .always
         session = URLSession(configuration: configuration)
+        sessionRepository = KeychainSessionRepository()
         authService = AuthService(session: session)
         reservationAPI = ReservationAPI(session: session)
         let watchSync = WatchSyncService()
@@ -41,8 +43,8 @@ final class AppContainer: ObservableObject {
             let currentSettings = settingsRepository.load()
             watchSync.sync(values, maxCount: currentSettings.watchMaxReservationCount, expirationInterval: repository.expirationInterval)
         })
-        restoreCookies()
-        isAuthenticated = (try? KeychainStore().read("username")) != nil
+        sessionRepository.restoreSession(into: session)
+        isAuthenticated = sessionRepository.currentUsername() != nil
     }
 
     func updateWatchSettings(maxCount: Int, expirationMinutes: Double) async {
@@ -63,21 +65,10 @@ final class AppContainer: ObservableObject {
         settings = updated
     }
 
-    func persistCookies() {
-        let storage = session.configuration.httpCookieStorage ?? HTTPCookieStorage.shared
-        guard let cookies = storage.cookies else { return }
-        let values = cookies.map { cookie in
-            [
-                "name": cookie.name,
-                "value": cookie.value,
-                "domain": cookie.domain,
-                "path": cookie.path,
-                "expires": cookie.expiresDate?.timeIntervalSince1970 ?? 0
-            ] as [String: Any]
-        }
-        guard let data = try? JSONSerialization.data(withJSONObject: values),
-              let encoded = String(data: data, encoding: .utf8) else { return }
-        try? KeychainStore().save(encoded, for: "cookies")
+    func completeAuthentication(username: String) {
+        sessionRepository.saveUsername(username)
+        sessionRepository.persistSession(from: session)
+        isAuthenticated = true
     }
 
     func expireSession() {
@@ -87,38 +78,19 @@ final class AppContainer: ObservableObject {
     }
 
     func logout() {
-        clearSession()
+        sessionRepository.clearUsername()
+        sessionRepository.clearSession(from: session)
         sessionMessage = nil
         isAuthenticated = false
     }
 
-    private func clearSession() {
-        try? KeychainStore().delete("username")
-        let cookies = session.configuration.httpCookieStorage ?? HTTPCookieStorage.shared
-        cookies.cookies?.forEach { cookies.deleteCookie($0) }
-        try? KeychainStore().delete("cookies")
+    func currentUsername() -> String? {
+        sessionRepository.currentUsername()
     }
 
-    private func restoreCookies() {
-        guard let encoded = try? KeychainStore().read("cookies"),
-              let data = encoded.data(using: .utf8),
-              let values = try? JSONSerialization.jsonObject(with: data) as? [[String: Any]] else { return }
-        let storage = session.configuration.httpCookieStorage ?? HTTPCookieStorage.shared
-        for item in values {
-            guard let name = item["name"] as? String,
-                  let cookieValue = item["value"] as? String,
-                  let domain = item["domain"] as? String,
-                  let path = item["path"] as? String else { continue }
-            var properties: [HTTPCookiePropertyKey: Any] = [
-                .name: name, .value: cookieValue, .domain: domain, .path: path
-            ]
-            if let timestamp = item["expires"] as? Double, timestamp > 0 {
-                properties[.expires] = Date(timeIntervalSince1970: timestamp)
-            }
-            if let cookie = HTTPCookie(properties: properties) {
-                storage.setCookie(cookie)
-            }
-        }
+    private func clearSession() {
+        sessionRepository.clearUsername()
+        sessionRepository.clearSession(from: session)
     }
 }
 
@@ -187,7 +159,7 @@ struct LoginView: View {
             .padding(24)
         }
         .sheet(isPresented: $showingVerification) {
-            if let challenge { VerificationDialog(challenge: challenge, authService: container.authService, username: username, password: password) { showingVerification = false; container.persistCookies(); container.isAuthenticated = true }.presentationDetents([.medium]).presentationDragIndicator(.visible) }
+            if let challenge { VerificationDialog(challenge: challenge, authService: container.authService, username: username, password: password) { showingVerification = false; container.completeAuthentication(username: username) }.presentationDetents([.medium]).presentationDragIndicator(.visible) }
         }
     }
 
@@ -200,9 +172,7 @@ struct LoginView: View {
             self.challenge = challenge
             if challenge.kind != .none { showingVerification = true; return }
             try await container.authService.login(username: username, password: password)
-            try KeychainStore().save(username, for: "username")
-            container.persistCookies()
-            container.isAuthenticated = true
+            container.completeAuthentication(username: username)
         } catch { errorMessage = error.localizedDescription }
     }
 }
@@ -250,7 +220,6 @@ struct VerificationDialog: View {
         defer { isLoading = false }
         do {
             try await authService.login(username: username, password: password, verificationCode: code, rememberDevice: rememberDevice)
-            try KeychainStore().save(username, for: "username")
             onSuccess()
         } catch { errorMessage = error.localizedDescription }
     }
@@ -315,7 +284,7 @@ struct SettingsView: View {
                             .font(.system(size: 42))
                             .foregroundStyle(.blue)
                         VStack(alignment: .leading, spacing: 4) {
-                            Text((try? KeychainStore().read("username")) ?? "北京大学用户")
+                            Text(container.currentUsername() ?? "北京大学用户")
                                 .font(.headline)
                             Text("已登录")
                                 .font(.subheadline)

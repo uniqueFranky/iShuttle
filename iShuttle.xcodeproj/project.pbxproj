@@ -13,6 +13,7 @@
 		000000000000000000300003 /* iShuttle/Infrastructure/Networking/ReservationAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200003 /* iShuttle/Infrastructure/Networking/ReservationAPI.swift */; };
 		000000000000000000300004 /* iShuttle/Infrastructure/Persistence/ReservationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200004 /* iShuttle/Infrastructure/Persistence/ReservationStore.swift */; };
 		000000000000000000300005 /* iShuttle/Infrastructure/Authentication/KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200005 /* iShuttle/Infrastructure/Authentication/KeychainStore.swift */; };
+		000000000000000000300020 /* iShuttle/Infrastructure/Authentication/KeychainSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200020 /* iShuttle/Infrastructure/Authentication/KeychainSessionRepository.swift */; };
 		000000000000000000300006 /* iShuttle/Domain/Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200006 /* iShuttle/Domain/Models.swift */; };
 		000000000000000000300007 /* iShuttle/Presentation/RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200007 /* iShuttle/Presentation/RootView.swift */; };
 		000000000000000000300008 /* iShuttle/Domain/RouteLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200008 /* iShuttle/Domain/RouteLogic.swift */; };
@@ -26,6 +27,7 @@
 		000000000000000000300016 /* iShuttle/Domain/AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200016 /* iShuttle/Domain/AppSettings.swift */; };
 		000000000000000000300017 /* iShuttle/Infrastructure/Repositories/UserDefaultsSettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200017 /* iShuttle/Infrastructure/Repositories/UserDefaultsSettingsRepository.swift */; };
 		000000000000000000300018 /* iShuttle/Domain/Repositories/SettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200018 /* iShuttle/Domain/Repositories/SettingsRepository.swift */; };
+		000000000000000000300021 /* iShuttle/Domain/Repositories/SessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200021 /* iShuttle/Domain/Repositories/SessionRepository.swift */; };
 		000000000000000000300019 /* iShuttle/Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200019 /* iShuttle/Assets.xcassets */; };
 		31F7528D3050799F00813BCE /* iShuttleWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 31F752833050799D00813BCE /* iShuttleWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -62,6 +64,7 @@
 		000000000000000000200003 /* iShuttle/Infrastructure/Networking/ReservationAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Networking/ReservationAPI.swift; sourceTree = "<group>"; };
 		000000000000000000200004 /* iShuttle/Infrastructure/Persistence/ReservationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Persistence/ReservationStore.swift; sourceTree = "<group>"; };
 		000000000000000000200005 /* iShuttle/Infrastructure/Authentication/KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Authentication/KeychainStore.swift; sourceTree = "<group>"; };
+		000000000000000000200020 /* iShuttle/Infrastructure/Authentication/KeychainSessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Authentication/KeychainSessionRepository.swift; sourceTree = "<group>"; };
 		000000000000000000200006 /* iShuttle/Domain/Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Domain/Models.swift; sourceTree = "<group>"; };
 		000000000000000000200007 /* iShuttle/Presentation/RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Presentation/RootView.swift; sourceTree = "<group>"; };
 		000000000000000000200008 /* iShuttle/Domain/RouteLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Domain/RouteLogic.swift; sourceTree = "<group>"; };
@@ -75,6 +78,7 @@
 		000000000000000000200016 /* iShuttle/Domain/AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Domain/AppSettings.swift; sourceTree = "<group>"; };
 		000000000000000000200017 /* iShuttle/Infrastructure/Repositories/UserDefaultsSettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Repositories/UserDefaultsSettingsRepository.swift; sourceTree = "<group>"; };
 		000000000000000000200018 /* iShuttle/Domain/Repositories/SettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Domain/Repositories/SettingsRepository.swift; sourceTree = "<group>"; };
+		000000000000000000200021 /* iShuttle/Domain/Repositories/SessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Domain/Repositories/SessionRepository.swift; sourceTree = "<group>"; };
 		000000000000000000200019 /* iShuttle/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = iShuttle/Assets.xcassets; sourceTree = "<group>"; };
 		31F752833050799D00813BCE /* iShuttleWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iShuttleWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -123,6 +127,7 @@
 				000000000000000000200003 /* iShuttle/Infrastructure/Networking/ReservationAPI.swift */,
 				000000000000000000200004 /* iShuttle/Infrastructure/Persistence/ReservationStore.swift */,
 				000000000000000000200005 /* iShuttle/Infrastructure/Authentication/KeychainStore.swift */,
+				000000000000000000200020 /* iShuttle/Infrastructure/Authentication/KeychainSessionRepository.swift */,
 				000000000000000000200006 /* iShuttle/Domain/Models.swift */,
 				000000000000000000200007 /* iShuttle/Presentation/RootView.swift */,
 				000000000000000000200008 /* iShuttle/Domain/RouteLogic.swift */,
@@ -136,6 +141,7 @@
 				000000000000000000200016 /* iShuttle/Domain/AppSettings.swift */,
 				000000000000000000200017 /* iShuttle/Infrastructure/Repositories/UserDefaultsSettingsRepository.swift */,
 				000000000000000000200018 /* iShuttle/Domain/Repositories/SettingsRepository.swift */,
+				000000000000000000200021 /* iShuttle/Domain/Repositories/SessionRepository.swift */,
 				000000000000000000200019 /* iShuttle/Assets.xcassets */,
 			);
 			name = "Recovered References";
@@ -248,6 +254,7 @@
 				000000000000000000300003 /* iShuttle/Infrastructure/Networking/ReservationAPI.swift in Sources */,
 				000000000000000000300004 /* iShuttle/Infrastructure/Persistence/ReservationStore.swift in Sources */,
 				000000000000000000300005 /* iShuttle/Infrastructure/Authentication/KeychainStore.swift in Sources */,
+				000000000000000000300020 /* iShuttle/Infrastructure/Authentication/KeychainSessionRepository.swift in Sources */,
 				000000000000000000300006 /* iShuttle/Domain/Models.swift in Sources */,
 				000000000000000000300007 /* iShuttle/Presentation/RootView.swift in Sources */,
 				000000000000000000300008 /* iShuttle/Domain/RouteLogic.swift in Sources */,
@@ -261,6 +268,7 @@
 				000000000000000000300016 /* iShuttle/Domain/AppSettings.swift in Sources */,
 				000000000000000000300017 /* iShuttle/Infrastructure/Repositories/UserDefaultsSettingsRepository.swift in Sources */,
 				000000000000000000300018 /* iShuttle/Domain/Repositories/SettingsRepository.swift in Sources */,
+				000000000000000000300021 /* iShuttle/Domain/Repositories/SessionRepository.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -292,12 +300,12 @@
 		000000000000000000000013 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LKMBDQA2QL;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_KEY_CFBundleIconName = AppIcon;
 				INFOPLIST_FILE = iShuttle/Info.plist;
+				INFOPLIST_KEY_CFBundleIconName = AppIcon;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				PRODUCT_BUNDLE_IDENTIFIER = me.ezreal.iShuttle;
 				PRODUCT_NAME = iShuttle;
@@ -322,11 +330,11 @@
 		000000000000000000000017 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = LKMBDQA2QL;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_KEY_CFBundleIconName = AppIcon;
 				INFOPLIST_FILE = iShuttle/Info.plist;
+				INFOPLIST_KEY_CFBundleIconName = AppIcon;
 				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				PRODUCT_BUNDLE_IDENTIFIER = me.ezreal.iShuttle;
 				PRODUCT_NAME = iShuttle;
@@ -342,7 +350,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_KEY_CFBundleIconName = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -398,6 +405,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = iShuttleWatch;
+				INFOPLIST_KEY_CFBundleIconName = AppIcon;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = me.ezreal.iShuttle;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -431,7 +439,6 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				INFOPLIST_KEY_CFBundleIconName = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -482,6 +489,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = iShuttleWatch;
+				INFOPLIST_KEY_CFBundleIconName = AppIcon;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = me.ezreal.iShuttle;
 				LD_RUNPATH_SEARCH_PATHS = (
