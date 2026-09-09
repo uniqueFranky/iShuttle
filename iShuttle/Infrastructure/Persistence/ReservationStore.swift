@@ -1,6 +1,6 @@
 import Foundation
 
-actor ReservationStore {
+actor ReservationStore: ReservationLocalDataSource {
     private let url: URL
     private var reservations: [Reservation] = []
 

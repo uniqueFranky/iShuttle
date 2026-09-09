@@ -20,6 +20,9 @@
 		000000000000000000300010 /* iShuttle/Infrastructure/Networking/WProcResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200010 /* iShuttle/Infrastructure/Networking/WProcResponse.swift */; };
 		000000000000000000300011 /* iShuttle/Infrastructure/Location/LocationDirectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200011 /* iShuttle/Infrastructure/Location/LocationDirectionService.swift */; };
 		000000000000000000300012 /* iShuttle/Infrastructure/Connectivity/WatchSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200012 /* iShuttle/Infrastructure/Connectivity/WatchSyncService.swift */; };
+		000000000000000000300013 /* iShuttle/Domain/ReservationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200013 /* iShuttle/Domain/ReservationRepository.swift */; };
+		000000000000000000300014 /* iShuttle/Infrastructure/Repositories/DefaultReservationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200014 /* iShuttle/Infrastructure/Repositories/DefaultReservationRepository.swift */; };
+		000000000000000000300015 /* iShuttle/Application/ReservationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200015 /* iShuttle/Application/ReservationService.swift */; };
 		31F7528D3050799F00813BCE /* iShuttleWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 31F752833050799D00813BCE /* iShuttleWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -62,6 +65,9 @@
 		000000000000000000200010 /* iShuttle/Infrastructure/Networking/WProcResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Networking/WProcResponse.swift; sourceTree = "<group>"; };
 		000000000000000000200011 /* iShuttle/Infrastructure/Location/LocationDirectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Location/LocationDirectionService.swift; sourceTree = "<group>"; };
 		000000000000000000200012 /* iShuttle/Infrastructure/Connectivity/WatchSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Connectivity/WatchSyncService.swift; sourceTree = "<group>"; };
+		000000000000000000200013 /* iShuttle/Domain/ReservationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Domain/ReservationRepository.swift; sourceTree = "<group>"; };
+		000000000000000000200014 /* iShuttle/Infrastructure/Repositories/DefaultReservationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Repositories/DefaultReservationRepository.swift; sourceTree = "<group>"; };
+		000000000000000000200015 /* iShuttle/Application/ReservationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Application/ReservationService.swift; sourceTree = "<group>"; };
 		31F752833050799D00813BCE /* iShuttleWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iShuttleWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -116,6 +122,9 @@
 				000000000000000000200010 /* iShuttle/Infrastructure/Networking/WProcResponse.swift */,
 				000000000000000000200011 /* iShuttle/Infrastructure/Location/LocationDirectionService.swift */,
 				000000000000000000200012 /* iShuttle/Infrastructure/Connectivity/WatchSyncService.swift */,
+				000000000000000000200013 /* iShuttle/Domain/ReservationRepository.swift */,
+				000000000000000000200014 /* iShuttle/Infrastructure/Repositories/DefaultReservationRepository.swift */,
+				000000000000000000200015 /* iShuttle/Application/ReservationService.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -233,6 +242,9 @@
 				000000000000000000300010 /* iShuttle/Infrastructure/Networking/WProcResponse.swift in Sources */,
 				000000000000000000300011 /* iShuttle/Infrastructure/Location/LocationDirectionService.swift in Sources */,
 				000000000000000000300012 /* iShuttle/Infrastructure/Connectivity/WatchSyncService.swift in Sources */,
+				000000000000000000300013 /* iShuttle/Domain/ReservationRepository.swift in Sources */,
+				000000000000000000300014 /* iShuttle/Infrastructure/Repositories/DefaultReservationRepository.swift in Sources */,
+				000000000000000000300015 /* iShuttle/Application/ReservationService.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

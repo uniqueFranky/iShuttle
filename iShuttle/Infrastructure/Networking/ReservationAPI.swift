@@ -1,6 +1,6 @@
 import Foundation
 
-struct ReservationAPI {
+struct ReservationAPI: ReservationRemoteDataSource {
     private let session: URLSession
     private let baseURL = URL(string: "https://wproc.pku.edu.cn")!
 

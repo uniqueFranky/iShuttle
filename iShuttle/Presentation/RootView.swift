@@ -8,7 +8,9 @@ final class AppContainer: ObservableObject {
     let authService: AuthService
     let reservationAPI: ReservationAPI
     let reservations = ReservationStore()
-    let watchSync = WatchSyncService()
+    let reservationRepository: any ReservationRepository
+    let reservationService: ReservationService
+    let watchSync: WatchSyncService
     @Published var isAuthenticated: Bool
     @Published var sessionMessage: String?
 
@@ -19,8 +21,15 @@ final class AppContainer: ObservableObject {
         session = URLSession(configuration: configuration)
         authService = AuthService(session: session)
         reservationAPI = ReservationAPI(session: session)
+        let watchSync = WatchSyncService()
+        self.watchSync = watchSync
+        let repository = DefaultReservationRepository(remote: reservationAPI, local: reservations)
+        reservationRepository = repository
         isAuthenticated = false
         sessionMessage = nil
+        reservationService = ReservationService(repository: repository, onReservationsChanged: { values in
+            watchSync.sync(values)
+        })
         restoreCookies()
         isAuthenticated = (try? KeychainStore().read("username")) != nil
     }
@@ -321,10 +330,8 @@ struct ReservationView: View {
         self.store = store
         self.container = container
         _viewModel = StateObject(wrappedValue: ReservationViewModel(
-            api: container.reservationAPI,
-            store: store,
-            onAuthenticationRequired: { container.expireSession() },
-            onReservationsChanged: { values in container.watchSync.sync(values) }
+            service: container.reservationService,
+            onAuthenticationRequired: { container.expireSession() }
         ))
     }
 
@@ -523,10 +530,8 @@ struct MyReservationsView: View {
         self.store = store
         self.container = container
         _viewModel = StateObject(wrappedValue: ReservationViewModel(
-            api: container.reservationAPI,
-            store: store,
-            onAuthenticationRequired: { container.expireSession() },
-            onReservationsChanged: { values in container.watchSync.sync(values) }
+            service: container.reservationService,
+            onAuthenticationRequired: { container.expireSession() }
         ))
     }
 
@@ -570,7 +575,7 @@ struct MyReservationsView: View {
             .task { await viewModel.refreshReservations() }
             .refreshable { await viewModel.refreshReservations() }
             .sheet(item: $selectedReservation) { reservation in
-                ReservationQRCodeView(reservation: reservation, api: container.reservationAPI)
+                ReservationQRCodeView(reservation: reservation, service: container.reservationService)
             }
             .alert("操作失败", isPresented: Binding(
                 get: { viewModel.errorMessage != nil },
@@ -593,7 +598,7 @@ struct MyReservationsView: View {
 
 struct ReservationQRCodeView: View {
     let reservation: Reservation
-    let api: ReservationAPI
+    let service: ReservationService
     @Environment(\.dismiss) private var dismiss
     @State private var payload: String?
     @State private var errorMessage: String?
@@ -624,7 +629,8 @@ struct ReservationQRCodeView: View {
             }
             .task {
                 do {
-                    payload = try await api.qrCode(for: reservation)
+                    let resolved = try await service.qrCodeReservation(reservation)
+                    payload = resolved.qrCodePayload
                 } catch is CancellationError {
                 } catch {
                     errorMessage = error.localizedDescription
@@ -675,45 +681,14 @@ struct QRHomeView: View {
             }
         }
         .task {
-            let cached = await store.load()
-            reservation = cached.filter(\.isVisibleAt).sorted { $0.departure < $1.departure }.first
-            print("[QRHome] 本地缓存 reservations=\(cached.count)")
             do {
-                let remote = try await container.reservationAPI.currentReservations()
-                print("[QRHome] 远端 reservations=\(remote.count)")
-                for item in remote {
-                    if let old = cached.first(where: { $0.id == item.id }), let code = old.qrCodePayload {
-                        print("[QRHome] 使用缓存二维码 id=\(item.id), payloadLength=\(code.count)")
-                        await store.upsert(Reservation(
-                            id: item.id,
-                            hallAppointmentDataID: item.hallAppointmentDataID,
-                            routeName: item.routeName,
-                            departure: item.departure,
-                            qrCodePayload: code
-                        ))
-                    } else {
-                        do {
-                            let code = try await container.reservationAPI.qrCode(for: item)
-                            print("[QRHome] 获取二维码成功 id=\(item.id), payloadLength=\(code.count)")
-                            await store.upsert(Reservation(
-                                id: item.id,
-                                hallAppointmentDataID: item.hallAppointmentDataID,
-                                routeName: item.routeName,
-                                departure: item.departure,
-                                qrCodePayload: code
-                            ))
-                        } catch {
-                            print("[QRHome] 获取二维码失败 id=\(item.id): \(error.localizedDescription)")
-                            throw error
-                        }
-                    }
+                let refreshed = try await container.reservationService.refreshReservations()
+                guard let latest = refreshed.first else {
+                    reservation = nil
+                    return
                 }
-                let updated = await store.all()
-                reservation = updated.filter(\.isVisibleAt).sorted { $0.departure < $1.departure }.first
-                print("[QRHome] 刷新完成，sync reservations=\(updated.count)")
-                container.watchSync.sync(updated)
+                reservation = try await container.reservationService.qrCodeReservation(latest)
             } catch {
-                print("[QRHome] 刷新失败: \(error.localizedDescription)")
                 if case APIError.authenticationRequired = error {
                     container.expireSession()
                 }
