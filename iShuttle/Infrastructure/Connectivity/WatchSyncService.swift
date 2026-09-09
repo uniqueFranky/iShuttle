@@ -17,34 +17,39 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
         session?.activate()
     }
 
-    func sync(_ reservations: [Reservation]) {
-        logger.info("开始同步，reservations=\(reservations.count, privacy: .public)")
+    func sync(_ reservations: [Reservation], maxCount: Int = 3, expirationInterval: TimeInterval = 600) {
+        logger.info("开始同步，reservations=\(reservations.count, privacy: .public)，maxCount=\(maxCount, privacy: .public)，expirationMinutes=\(expirationInterval / 60, privacy: .public)")
         let latest = reservations
-            .filter { $0.isVisibleAt && !($0.qrCodePayload ?? "").isEmpty }
+            .filter { $0.departure.addingTimeInterval(expirationInterval) >= Date() && !($0.qrCodePayload ?? "").isEmpty }
             .sorted { $0.departure < $1.departure }
-            .first
-        if latest == nil, !reservations.isEmpty {
+            .prefix(max(0, maxCount))
+        if latest.isEmpty, !reservations.isEmpty {
             logger.info("存在预约但暂时没有二维码，保留 Watch 当前 context，不发送 clear")
             return
         }
         let context: [String: Any]
         do {
-           if let latest {
-                logger.info("选中预约 id=\(latest.id, privacy: .public)，departure=\(latest.departure, privacy: .public)，payloadLength=\((latest.qrCodePayload ?? "").count, privacy: .public)")
-               let transfer = WatchReservationTransfer(
-                id: latest.id,
-                hallAppointmentDataID: latest.hallAppointmentDataID,
-                routeName: latest.routeName,
-                departure: latest.departure,
-                qrCodePayload: latest.qrCodePayload ?? "",
-                qrCodeImageData: Self.qrImageData(for: latest.qrCodePayload ?? "")
-               )
-                guard let data = try? JSONEncoder().encode(transfer) else {
+           if !latest.isEmpty {
+                let transfers = latest.map { reservation in
+                    WatchReservationTransfer(
+                        id: reservation.id,
+                        hallAppointmentDataID: reservation.hallAppointmentDataID,
+                        routeName: reservation.routeName,
+                        departure: reservation.departure,
+                        qrCodePayload: reservation.qrCodePayload ?? "",
+                        qrCodeImageData: Self.qrImageData(for: reservation.qrCodePayload ?? "")
+                    )
+                }
+                let envelope = WatchReservationEnvelope(
+                    reservations: Array(transfers),
+                    expirationInterval: expirationInterval
+                )
+                guard let data = try? JSONEncoder().encode(envelope) else {
                     logger.error("Watch transfer 编码失败")
                     return
                 }
-                logger.info("transfer 编码成功，bytes=\(data.count, privacy: .public)，imageBytes=\(transfer.qrCodeImageData?.count ?? 0, privacy: .public)")
-                context = ["reservation": data]
+                logger.info("transfer 编码成功，bytes=\(data.count, privacy: .public)，count=\(transfers.count, privacy: .public)")
+                context = ["reservations": data]
             } else {
                 logger.info("没有可同步的有效预约，准备清空 Watch context")
                 // WCSession 对空字典在部分系统版本上会报 “Application context data is nil”。
@@ -104,4 +109,9 @@ private struct WatchReservationTransfer: Codable {
     let departure: Date
     let qrCodePayload: String
     let qrCodeImageData: Data?
+}
+
+private struct WatchReservationEnvelope: Codable {
+    let reservations: [WatchReservationTransfer]
+    let expirationInterval: TimeInterval
 }

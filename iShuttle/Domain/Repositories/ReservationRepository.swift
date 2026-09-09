@@ -22,6 +22,7 @@ protocol ReservationRepository {
     func reservationWithQRCode(_ reservation: Reservation) async throws -> Reservation
     func createReservation(for bus: BusOption, calendar: Calendar) async throws -> Reservation
     func cancelReservation(_ reservation: Reservation) async throws
+    var expirationInterval: TimeInterval { get set }
 }
 
 extension Reservation {

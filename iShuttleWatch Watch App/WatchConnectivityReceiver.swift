@@ -37,13 +37,21 @@ final class WatchConnectivityReceiver: NSObject, ObservableObject, WCSessionDele
         }
     }
 
+#if os(iOS)
+    nonisolated func sessionDidBecomeInactive(_ session: WCSession) {}
+
+    nonisolated func sessionDidDeactivate(_ session: WCSession) {
+        session.activate()
+    }
+#endif
+
     @MainActor
     private func consume(_ context: [String: Any], source: String) {
         logger.info("处理 context source=\(source, privacy: .public)，keys=\(context.keys.sorted().joined(separator: ","), privacy: .public)")
-        guard let raw = context["reservation"] else {
+        guard let raw = context["reservations"] else {
             if context["clear"] as? Bool == true {
                 logger.info("收到 clear 标记，清除 Watch 本地预约")
-                store.save(nil)
+                store.save([], expirationInterval: 600)
             } else {
                 logger.warning("context 没有 reservation 或 clear 标记，忽略")
             }
@@ -55,12 +63,17 @@ final class WatchConnectivityReceiver: NSObject, ObservableObject, WCSessionDele
         }
         logger.info("收到 reservation bytes=\(data.count, privacy: .public)")
         do {
-            let value = try JSONDecoder().decode(WatchReservation.self, from: data)
-            logger.info("解码成功 id=\(value.id, privacy: .public)，payloadLength=\(value.qrCodePayload.count, privacy: .public)，imageBytes=\(value.qrCodeImageData?.count ?? 0, privacy: .public)，expired=\(value.isExpired, privacy: .public)")
-            store.save(value)
+            let envelope = try JSONDecoder().decode(WatchReservationEnvelope.self, from: data)
+            logger.info("解码成功 count=\(envelope.reservations.count, privacy: .public)，expirationMinutes=\(envelope.expirationInterval / 60, privacy: .public)")
+            store.save(envelope.reservations, expirationInterval: envelope.expirationInterval)
             logger.info("已交给 WatchReservationStore 保存")
         } catch {
             logger.error("WatchReservation 解码失败：\(error.localizedDescription, privacy: .public)")
         }
     }
+}
+
+private struct WatchReservationEnvelope: Codable {
+    let reservations: [WatchReservation]
+    let expirationInterval: TimeInterval
 }

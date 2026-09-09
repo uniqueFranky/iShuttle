@@ -8,11 +8,13 @@ final class AppContainer: ObservableObject {
     let authService: AuthService
     let reservationAPI: ReservationAPI
     let reservations = ReservationStore()
-    let reservationRepository: any ReservationRepository
+    var reservationRepository: any ReservationRepository
     let reservationService: ReservationService
     let watchSync: WatchSyncService
+    let settingsRepository: any SettingsRepository
     @Published var isAuthenticated: Bool
     @Published var sessionMessage: String?
+    @Published var settings: AppSettings
 
     init() {
         let configuration = URLSessionConfiguration.default
@@ -23,15 +25,42 @@ final class AppContainer: ObservableObject {
         reservationAPI = ReservationAPI(session: session)
         let watchSync = WatchSyncService()
         self.watchSync = watchSync
-        let repository = DefaultReservationRepository(remote: reservationAPI, local: reservations)
+        let settingsRepository = UserDefaultsSettingsRepository()
+        let settings = settingsRepository.load()
+        self.settingsRepository = settingsRepository
+        self.settings = settings
+        let repository = DefaultReservationRepository(
+            remote: reservationAPI,
+            local: reservations,
+            expirationInterval: settings.watchExpirationMinutes * 60
+        )
         reservationRepository = repository
         isAuthenticated = false
         sessionMessage = nil
         reservationService = ReservationService(repository: repository, onReservationsChanged: { values in
-            watchSync.sync(values)
+            let currentSettings = settingsRepository.load()
+            watchSync.sync(values, maxCount: currentSettings.watchMaxReservationCount, expirationInterval: repository.expirationInterval)
         })
         restoreCookies()
         isAuthenticated = (try? KeychainStore().read("username")) != nil
+    }
+
+    func updateWatchSettings(maxCount: Int, expirationMinutes: Double) async {
+        var updated = settingsRepository.load()
+        updated.watchMaxReservationCount = maxCount
+        updated.watchExpirationMinutes = expirationMinutes
+        settingsRepository.save(updated)
+        settings = updated
+        reservationRepository.expirationInterval = expirationMinutes * 60
+        let cached = await reservations.all()
+        watchSync.sync(cached, maxCount: maxCount, expirationInterval: reservationRepository.expirationInterval)
+    }
+
+    func updateThemeMode(_ themeMode: String) {
+        var updated = settingsRepository.load()
+        updated.themeMode = themeMode
+        settingsRepository.save(updated)
+        settings = updated
     }
 
     func persistCookies() {
@@ -95,7 +124,6 @@ final class AppContainer: ObservableObject {
 
 struct RootView: View {
     @ObservedObject var container: AppContainer
-    @AppStorage("themeMode") private var themeMode = "system"
 
     var body: some View {
         Group {
@@ -117,7 +145,7 @@ struct RootView: View {
     }
 
     private var preferredColorScheme: ColorScheme? {
-        switch themeMode {
+        switch container.settings.themeMode {
         case "light": return .light
         case "dark": return .dark
         default: return nil
@@ -266,8 +294,17 @@ struct HomeView: View {
 
 struct SettingsView: View {
     @ObservedObject var container: AppContainer
-    @AppStorage("themeMode") private var themeMode = "system"
+    @State private var themeMode: String
+    @State private var watchMaxReservationCount: Int
+    @State private var watchExpirationMinutes: Double
     @State private var showingLogoutConfirmation = false
+
+    init(container: AppContainer) {
+        self.container = container
+        _themeMode = State(initialValue: container.settings.themeMode)
+        _watchMaxReservationCount = State(initialValue: container.settings.watchMaxReservationCount)
+        _watchExpirationMinutes = State(initialValue: container.settings.watchExpirationMinutes)
+    }
 
     var body: some View {
         NavigationStack {
@@ -297,6 +334,11 @@ struct SettingsView: View {
                     .pickerStyle(.navigationLink)
                 }
 
+                Section("Apple Watch") {
+                    Stepper("同步班次数：\(watchMaxReservationCount)", value: $watchMaxReservationCount, in: 1...10)
+                    Stepper("班车过期时间：\(watchExpirationMinutes, specifier: "%.0f") 分钟", value: $watchExpirationMinutes, in: 1...60, step: 1)
+                }
+
                 Section {
                     Button(role: .destructive) {
                         showingLogoutConfirmation = true
@@ -306,6 +348,15 @@ struct SettingsView: View {
                 }
             }
             .navigationTitle("设置")
+            .onChange(of: watchMaxReservationCount) { _, value in
+                Task { await container.updateWatchSettings(maxCount: value, expirationMinutes: watchExpirationMinutes) }
+            }
+            .onChange(of: watchExpirationMinutes) { _, value in
+                Task { await container.updateWatchSettings(maxCount: watchMaxReservationCount, expirationMinutes: value) }
+            }
+            .onChange(of: themeMode) { _, value in
+                container.updateThemeMode(value)
+            }
             .confirmationDialog("确定要退出当前账号吗？", isPresented: $showingLogoutConfirmation, titleVisibility: .visible) {
                 Button("退出登录", role: .destructive) {
                     container.logout()

@@ -8,7 +8,7 @@ struct WatchReservation: Codable, Equatable {
     let qrCodePayload: String
     let qrCodeImageData: Data?
 
-    var isExpired: Bool {
-        departure.addingTimeInterval(600) < Date()
+    func isExpired(using expirationInterval: TimeInterval) -> Bool {
+        departure.addingTimeInterval(expirationInterval) < Date()
     }
 }

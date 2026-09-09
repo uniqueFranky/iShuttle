@@ -3,10 +3,12 @@ import Foundation
 final class DefaultReservationRepository: ReservationRepository {
     private let remote: any ReservationRemoteDataSource
     private let local: any ReservationLocalDataSource
+    var expirationInterval: TimeInterval
 
-    init(remote: any ReservationRemoteDataSource, local: any ReservationLocalDataSource) {
+    init(remote: any ReservationRemoteDataSource, local: any ReservationLocalDataSource, expirationInterval: TimeInterval = 600) {
         self.remote = remote
         self.local = local
+        self.expirationInterval = expirationInterval
     }
 
     func availableBuses(on date: Date) async throws -> [BusOption] {
@@ -17,7 +19,7 @@ final class DefaultReservationRepository: ReservationRepository {
         let remoteReservations = try await remote.currentReservations()
         let cached = await local.load()
         let merged = remoteReservations.compactMap { remoteReservation -> Reservation? in
-            guard remoteReservation.isVisibleAt else { return nil }
+            guard remoteReservation.departure.addingTimeInterval(expirationInterval) >= Date() else { return nil }
             guard let cachedReservation = cached.first(where: { $0.hasSameIdentity(as: remoteReservation) }) else {
                 return remoteReservation
             }
