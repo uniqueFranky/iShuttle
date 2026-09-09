@@ -11,15 +11,18 @@ final class ReservationViewModel: ObservableObject {
     private let api: ReservationAPI
     private let store: ReservationStore
     private let onAuthenticationRequired: () -> Void
+    private let onReservationsChanged: ([Reservation]) -> Void
 
     init(
         api: ReservationAPI,
         store: ReservationStore,
-        onAuthenticationRequired: @escaping () -> Void
+        onAuthenticationRequired: @escaping () -> Void,
+        onReservationsChanged: @escaping ([Reservation]) -> Void = { _ in }
     ) {
         self.api = api
         self.store = store
         self.onAuthenticationRequired = onAuthenticationRequired
+        self.onReservationsChanged = onReservationsChanged
     }
 
     func refresh(on date: Date, calendar: Calendar, reportErrors: Bool = true) async {
@@ -102,6 +105,7 @@ final class ReservationViewModel: ObservableObject {
                 await store.upsert(saved)
             }
             await refresh(on: bus.departure, calendar: calendar, reportErrors: false)
+            onReservationsChanged(reservations)
         } catch {
             handle(error)
         }
@@ -117,6 +121,7 @@ final class ReservationViewModel: ObservableObject {
             // 取消状态在服务端落库存在短暂延迟，稍后再查询，避免旧状态把预约重新带回来。
             try? await Task.sleep(for: .milliseconds(800))
             await refreshReservations()
+            onReservationsChanged(reservations)
         } catch {
             handle(error)
         }

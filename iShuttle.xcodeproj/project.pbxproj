@@ -19,7 +19,33 @@
 		000000000000000000300009 /* iShuttle/Presentation/ReservationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200009 /* iShuttle/Presentation/ReservationViewModel.swift */; };
 		000000000000000000300010 /* iShuttle/Infrastructure/Networking/WProcResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200010 /* iShuttle/Infrastructure/Networking/WProcResponse.swift */; };
 		000000000000000000300011 /* iShuttle/Infrastructure/Location/LocationDirectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200011 /* iShuttle/Infrastructure/Location/LocationDirectionService.swift */; };
+		000000000000000000300012 /* iShuttle/Infrastructure/Connectivity/WatchSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200012 /* iShuttle/Infrastructure/Connectivity/WatchSyncService.swift */; };
+		31F7528D3050799F00813BCE /* iShuttleWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 31F752833050799D00813BCE /* iShuttleWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		31F7528B3050799F00813BCE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 000000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 31F752823050799D00813BCE;
+			remoteInfo = "iShuttleWatch Watch App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		31F7528E3050799F00813BCE /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				31F7528D3050799F00813BCE /* iShuttleWatch Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		000000000000000000000030 /* iShuttle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iShuttle.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -35,16 +61,31 @@
 		000000000000000000200009 /* iShuttle/Presentation/ReservationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Presentation/ReservationViewModel.swift; sourceTree = "<group>"; };
 		000000000000000000200010 /* iShuttle/Infrastructure/Networking/WProcResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Networking/WProcResponse.swift; sourceTree = "<group>"; };
 		000000000000000000200011 /* iShuttle/Infrastructure/Location/LocationDirectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Location/LocationDirectionService.swift; sourceTree = "<group>"; };
+		000000000000000000200012 /* iShuttle/Infrastructure/Connectivity/WatchSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Connectivity/WatchSyncService.swift; sourceTree = "<group>"; };
+		31F752833050799D00813BCE /* iShuttleWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iShuttleWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		000000000000000000000004 /* iShuttle */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = iShuttle; sourceTree = "<group>"; };
+		31F752843050799E00813BCE /* iShuttleWatch Watch App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "iShuttleWatch Watch App"; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		31F752803050799D00813BCE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
 		000000000000000000000002 = {
 			isa = PBXGroup;
 			children = (
+				31F752843050799E00813BCE /* iShuttleWatch Watch App */,
+				000000000000000000000003 /* Products */,
 				000000000000000000000004 /* iShuttle */,
 				319A1F6B305040E500A0975F /* Recovered References */,
 			);
@@ -54,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				000000000000000000000030 /* iShuttle.app */,
+				31F752833050799D00813BCE /* iShuttleWatch Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -73,6 +115,7 @@
 				000000000000000000200009 /* iShuttle/Presentation/ReservationViewModel.swift */,
 				000000000000000000200010 /* iShuttle/Infrastructure/Networking/WProcResponse.swift */,
 				000000000000000000200011 /* iShuttle/Infrastructure/Location/LocationDirectionService.swift */,
+				000000000000000000200012 /* iShuttle/Infrastructure/Connectivity/WatchSyncService.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -86,14 +129,38 @@
 			buildPhases = (
 				000000000000000000000021 /* Sources */,
 				000000000000000000000022 /* Resources */,
+				31F7528E3050799F00813BCE /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				31F7528C3050799F00813BCE /* PBXTargetDependency */,
+			);
+			name = iShuttle;
+			productName = iShuttle;
+			productReference = 000000000000000000000030 /* iShuttle.app */;
+			productType = "com.apple.product-type.application";
+		};
+		31F752823050799D00813BCE /* iShuttleWatch Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 31F752913050799F00813BCE /* Build configuration list for PBXNativeTarget "iShuttleWatch Watch App" */;
+			buildPhases = (
+				31F7527F3050799D00813BCE /* Sources */,
+				31F752803050799D00813BCE /* Frameworks */,
+				31F752813050799D00813BCE /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = iShuttle;
-			productName = iShuttle;
-			productReference = 000000000000000000000030 /* iShuttle.app */;
+			fileSystemSynchronizedGroups = (
+				31F752843050799E00813BCE /* iShuttleWatch Watch App */,
+			);
+			name = "iShuttleWatch Watch App";
+			packageProductDependencies = (
+			);
+			productName = "iShuttleWatch Watch App";
+			productReference = 31F752833050799D00813BCE /* iShuttleWatch Watch App.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -102,6 +169,15 @@
 		000000000000000000000001 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				KnownAssetTags = (
+					New,
+				);
+				LastSwiftUpdateCheck = 2660;
+				TargetAttributes = {
+					31F752823050799D00813BCE = {
+						CreatedOnToolsVersion = 26.6;
+					};
+				};
 			};
 			buildConfigurationList = 000000000000000000000010 /* Build configuration list for PBXProject "iShuttle" */;
 			compatibilityVersion = "Xcode 16.0";
@@ -117,12 +193,20 @@
 			projectRoot = "";
 			targets = (
 				000000000000000000000020 /* iShuttle */,
+				31F752823050799D00813BCE /* iShuttleWatch Watch App */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		000000000000000000000022 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		31F752813050799D00813BCE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -148,10 +232,26 @@
 				000000000000000000300009 /* iShuttle/Presentation/ReservationViewModel.swift in Sources */,
 				000000000000000000300010 /* iShuttle/Infrastructure/Networking/WProcResponse.swift in Sources */,
 				000000000000000000300011 /* iShuttle/Infrastructure/Location/LocationDirectionService.swift in Sources */,
+				000000000000000000300012 /* iShuttle/Infrastructure/Connectivity/WatchSyncService.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		31F7527F3050799D00813BCE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		31F7528C3050799F00813BCE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 31F752823050799D00813BCE /* iShuttleWatch Watch App */;
+			targetProxy = 31F7528B3050799F00813BCE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		000000000000000000000012 /* Release */ = {
@@ -174,8 +274,204 @@
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		000000000000000000000014 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		000000000000000000000017 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = LKMBDQA2QL;
+				INFOPLIST_FILE = iShuttle/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				PRODUCT_BUNDLE_IDENTIFIER = me.ezreal.iShuttle;
+				PRODUCT_NAME = iShuttle;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		31F7528F3050799F00813BCE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = LKMBDQA2QL;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = iShuttleWatch;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = me.ezreal.iShuttle;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = me.ezreal.iShuttle.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 26.5;
+			};
+			name = Debug;
+		};
+		31F752903050799F00813BCE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = LKMBDQA2QL;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = iShuttleWatch;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = me.ezreal.iShuttle;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = me.ezreal.iShuttle.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 26.5;
 			};
 			name = Release;
 		};
@@ -185,6 +481,7 @@
 		000000000000000000000010 /* Build configuration list for PBXProject "iShuttle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
+				000000000000000000000014 /* Debug */,
 				000000000000000000000012 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
@@ -193,7 +490,17 @@
 		000000000000000000000011 /* Build configuration list for PBXNativeTarget "iShuttle" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
+				000000000000000000000017 /* Debug */,
 				000000000000000000000013 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		31F752913050799F00813BCE /* Build configuration list for PBXNativeTarget "iShuttleWatch Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				31F7528F3050799F00813BCE /* Debug */,
+				31F752903050799F00813BCE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
