@@ -28,7 +28,7 @@ struct MyReservationsView: View {
                     List(viewModel.reservations) { reservation in
                         HStack {
                             VStack(alignment: .leading, spacing: 4) {
-                                Text(departureText(for: reservation.departure))
+                                Text(viewModel.isOperating(reservation.id) ? "正在取消" : departureText(for: reservation.departure))
                                     .font(.headline)
                                 Text(RouteLogic.displayRouteName(reservation.routeName))
                                     .font(.caption)
@@ -60,6 +60,29 @@ struct MyReservationsView: View {
                 }
             }
             .navigationTitle("我的预约")
+            .overlay(alignment: .top) {
+                if let toastMessage = viewModel.toastMessage {
+                    Text(toastMessage)
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(.primary)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                        .background(.regularMaterial, in: Capsule())
+                        .shadow(color: .black.opacity(0.15), radius: 8, y: 3)
+                        .padding(.top, 8)
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                }
+            }
+            .animation(.easeInOut(duration: 0.2), value: viewModel.toastMessage)
+            .onChange(of: viewModel.toastMessage) { _, message in
+                guard message != nil else { return }
+                Task {
+                    try? await Task.sleep(for: .seconds(2))
+                    if viewModel.toastMessage == message {
+                        viewModel.toastMessage = nil
+                    }
+                }
+            }
             .task { await viewModel.refreshReservations() }
             .refreshable { await viewModel.refreshReservations() }
             .sheet(item: $selectedReservation) { reservation in

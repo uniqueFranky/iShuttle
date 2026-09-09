@@ -34,9 +34,10 @@ final class ReservationService {
         return created
     }
 
-    func cancel(_ reservation: Reservation) async throws {
+    func cancel(_ reservation: Reservation) async throws -> [Reservation] {
         try await repository.cancelReservation(reservation)
-        let values = (try? await repository.refreshReservations()) ?? []
+        let values = try await repository.refreshReservations()
         onReservationsChanged(values)
+        return values
     }
 }

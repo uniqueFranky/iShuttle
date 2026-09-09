@@ -80,6 +80,5 @@ final class DefaultReservationRepository: ReservationRepository {
     func cancelReservation(_ reservation: Reservation) async throws {
         try await remote.cancelReservation(reservation)
         await local.remove(id: reservation.id)
-        _ = try? await refreshReservations()
     }
 }
