@@ -2,9 +2,11 @@ import Foundation
 
 actor ReservationStore: ReservationLocalDataSource {
     private let url: URL
+    private var expirationInterval: TimeInterval
     private var reservations: [Reservation] = []
 
-    init(fileManager: FileManager = .default) {
+    init(expirationInterval: TimeInterval = 600, fileManager: FileManager = .default) {
+        self.expirationInterval = expirationInterval
         let directory = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
         try? fileManager.createDirectory(at: directory, withIntermediateDirectories: true)
         url = directory.appendingPathComponent("reservations.json")
@@ -44,8 +46,14 @@ actor ReservationStore: ReservationLocalDataSource {
         persist()
     }
 
+    func setExpirationInterval(_ expirationInterval: TimeInterval) {
+        self.expirationInterval = expirationInterval
+        purgeExpired()
+        persist()
+    }
+
     private func purgeExpired() {
-        let expiration = Date().addingTimeInterval(-600)
+        let expiration = Date().addingTimeInterval(-expirationInterval)
         reservations.removeAll { $0.departure < expiration }
     }
 

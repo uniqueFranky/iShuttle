@@ -34,7 +34,7 @@ final class DefaultReservationRepository: ReservationRepository {
     func reservationWithQRCode(_ reservation: Reservation) async throws -> Reservation {
         let cached = await local.load()
         if let cachedReservation = cached.first(where: {
-            $0.hasSameIdentity(as: reservation) && $0.isVisibleAt && !($0.qrCodePayload ?? "").isEmpty
+            $0.hasSameIdentity(as: reservation) && $0.isVisibleAt(using: expirationInterval) && !($0.qrCodePayload ?? "").isEmpty
         }) {
             return cachedReservation
         }

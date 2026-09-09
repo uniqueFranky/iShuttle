@@ -51,7 +51,7 @@ final class WatchConnectivityReceiver: NSObject, ObservableObject, WCSessionDele
         guard let raw = context["reservations"] else {
             if context["clear"] as? Bool == true {
                 logger.info("收到 clear 标记，清除 Watch 本地预约")
-                store.save([], expirationInterval: 600)
+                store.clearReservations()
             } else {
                 logger.warning("context 没有 reservation 或 clear 标记，忽略")
             }

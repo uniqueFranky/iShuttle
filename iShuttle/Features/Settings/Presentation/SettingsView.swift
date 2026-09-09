@@ -43,10 +43,14 @@ struct SettingsView: View {
                     .pickerStyle(.navigationLink)
                 }
 
-                Section("Apple Watch") {
-                    Stepper("同步班次数：\(watchMaxReservationCount)", value: $watchMaxReservationCount, in: 1...10)
-                    Stepper("班车过期时间：\(watchExpirationMinutes, specifier: "%.0f") 分钟", value: $watchExpirationMinutes, in: 1...60, step: 1)
+                Section("班车预约") {
+                    Stepper("预约过期时间：\(watchExpirationMinutes, specifier: "%.0f") 分钟", value: $watchExpirationMinutes, in: 1...60, step: 1)
                 }
+
+                Section("Apple Watch") {
+                    Stepper("最多同步车次：\(watchMaxReservationCount)", value: $watchMaxReservationCount, in: 1...10)
+                }
+
 
                 Section {
                     Button(role: .destructive) {
@@ -75,4 +79,3 @@ struct SettingsView: View {
         }
     }
 }
-

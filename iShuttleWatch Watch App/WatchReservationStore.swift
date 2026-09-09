@@ -43,6 +43,13 @@ final class WatchReservationStore: ObservableObject {
         logger.info("save: 成功 count=\(values.count, privacy: .public)，bytes=\(data.count, privacy: .public)")
     }
 
+    func clearReservations() {
+        UserDefaults.standard.removeObject(forKey: key)
+        reservations = []
+        reservation = nil
+        logger.info("clearReservations: 已清除预约，保留过期时间配置")
+    }
+
     private func clear() {
         UserDefaults.standard.removeObject(forKey: key)
         UserDefaults.standard.removeObject(forKey: expirationKey)

@@ -8,7 +8,7 @@ final class AppContainer: ObservableObject {
     let authService: AuthService
     private let sessionRepository: any SessionRepository
     let reservationAPI: ReservationAPI
-    let reservations = ReservationStore()
+    let reservations: ReservationStore
     var reservationRepository: any ReservationRepository
     let reservationService: ReservationService
     let watchSync: WatchSyncService
@@ -31,6 +31,7 @@ final class AppContainer: ObservableObject {
         let settings = settingsRepository.load()
         self.settingsRepository = settingsRepository
         self.settings = settings
+        reservations = ReservationStore(expirationInterval: settings.watchExpirationMinutes * 60)
         let repository = DefaultReservationRepository(
             remote: reservationAPI,
             local: reservations,
@@ -54,6 +55,7 @@ final class AppContainer: ObservableObject {
         settingsRepository.save(updated)
         settings = updated
         reservationRepository.expirationInterval = expirationMinutes * 60
+        await reservations.setExpirationInterval(expirationMinutes * 60)
         let cached = await reservations.all()
         watchSync.sync(cached, maxCount: maxCount, expirationInterval: reservationRepository.expirationInterval)
     }

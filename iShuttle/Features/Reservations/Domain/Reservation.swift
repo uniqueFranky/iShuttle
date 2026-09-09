@@ -7,5 +7,7 @@ struct Reservation: Identifiable, Codable, Equatable {
     let departure: Date
     var qrCodePayload: String?
 
-    var isVisibleAt: Bool { departure.addingTimeInterval(600) >= Date() }
+    func isVisibleAt(using expirationInterval: TimeInterval) -> Bool {
+        departure.addingTimeInterval(expirationInterval) >= Date()
+    }
 }
