@@ -16,8 +16,10 @@
 	<string>1.0</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>CFBundleIconName</key>
+	<string>AppIcon</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>用于根据你所在校区默认选择班车方向</string>
+	<string>用于根据你所在校区实时选择班车方向</string>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UISupportedInterfaceOrientations</key>
