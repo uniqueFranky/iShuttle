@@ -7,28 +7,40 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		000000000000000000300000 /* iShuttle/iShuttleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200000 /* iShuttle/iShuttleApp.swift */; };
-		000000000000000000300001 /* iShuttle/Infrastructure/Networking/RSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200001 /* iShuttle/Infrastructure/Networking/RSA.swift */; };
-		000000000000000000300002 /* iShuttle/Infrastructure/Networking/AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200002 /* iShuttle/Infrastructure/Networking/AuthService.swift */; };
-		000000000000000000300003 /* iShuttle/Infrastructure/Networking/ReservationAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200003 /* iShuttle/Infrastructure/Networking/ReservationAPI.swift */; };
-		000000000000000000300004 /* iShuttle/Infrastructure/Persistence/ReservationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200004 /* iShuttle/Infrastructure/Persistence/ReservationStore.swift */; };
-		000000000000000000300005 /* iShuttle/Infrastructure/Authentication/KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200005 /* iShuttle/Infrastructure/Authentication/KeychainStore.swift */; };
-		000000000000000000300020 /* iShuttle/Infrastructure/Authentication/KeychainSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200020 /* iShuttle/Infrastructure/Authentication/KeychainSessionRepository.swift */; };
-		000000000000000000300006 /* iShuttle/Domain/Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200006 /* iShuttle/Domain/Models.swift */; };
-		000000000000000000300007 /* iShuttle/Presentation/RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200007 /* iShuttle/Presentation/RootView.swift */; };
-		000000000000000000300008 /* iShuttle/Domain/RouteLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200008 /* iShuttle/Domain/RouteLogic.swift */; };
-		000000000000000000300009 /* iShuttle/Presentation/ReservationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200009 /* iShuttle/Presentation/ReservationViewModel.swift */; };
-		000000000000000000300010 /* iShuttle/Infrastructure/Networking/WProcResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200010 /* iShuttle/Infrastructure/Networking/WProcResponse.swift */; };
-		000000000000000000300011 /* iShuttle/Infrastructure/Location/LocationDirectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200011 /* iShuttle/Infrastructure/Location/LocationDirectionService.swift */; };
-		000000000000000000300012 /* iShuttle/Infrastructure/Connectivity/WatchSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200012 /* iShuttle/Infrastructure/Connectivity/WatchSyncService.swift */; };
-		000000000000000000300013 /* iShuttle/Domain/Repositories/ReservationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200013 /* iShuttle/Domain/Repositories/ReservationRepository.swift */; };
-		000000000000000000300014 /* iShuttle/Infrastructure/Repositories/DefaultReservationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200014 /* iShuttle/Infrastructure/Repositories/DefaultReservationRepository.swift */; };
-		000000000000000000300015 /* iShuttle/Application/Services/ReservationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200015 /* iShuttle/Application/Services/ReservationService.swift */; };
-		000000000000000000300016 /* iShuttle/Domain/AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200016 /* iShuttle/Domain/AppSettings.swift */; };
-		000000000000000000300017 /* iShuttle/Infrastructure/Repositories/UserDefaultsSettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200017 /* iShuttle/Infrastructure/Repositories/UserDefaultsSettingsRepository.swift */; };
-		000000000000000000300018 /* iShuttle/Domain/Repositories/SettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200018 /* iShuttle/Domain/Repositories/SettingsRepository.swift */; };
-		000000000000000000300021 /* iShuttle/Domain/Repositories/SessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200021 /* iShuttle/Domain/Repositories/SessionRepository.swift */; };
+		000000000000000000300000 /* iShuttle/App/iShuttleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200000 /* iShuttle/App/iShuttleApp.swift */; };
+		000000000000000000300001 /* iShuttle/Features/Authentication/Infrastructure/RSA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200001 /* iShuttle/Features/Authentication/Infrastructure/RSA.swift */; };
+		000000000000000000300002 /* iShuttle/Features/Authentication/Infrastructure/AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200002 /* iShuttle/Features/Authentication/Infrastructure/AuthService.swift */; };
+		000000000000000000300003 /* iShuttle/Features/Reservations/Infrastructure/ReservationAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200003 /* iShuttle/Features/Reservations/Infrastructure/ReservationAPI.swift */; };
+		000000000000000000300004 /* iShuttle/Features/Reservations/Infrastructure/ReservationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200004 /* iShuttle/Features/Reservations/Infrastructure/ReservationStore.swift */; };
+		000000000000000000300005 /* iShuttle/Core/Security/KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200005 /* iShuttle/Core/Security/KeychainStore.swift */; };
+		000000000000000000300006 /* iShuttle/Features/Reservations/Domain/Reservation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200006 /* iShuttle/Features/Reservations/Domain/Reservation.swift */; };
+		000000000000000000300007 /* iShuttle/App/RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200007 /* iShuttle/App/RootView.swift */; };
+		000000000000000000300008 /* iShuttle/Features/Reservations/Domain/RouteLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200008 /* iShuttle/Features/Reservations/Domain/RouteLogic.swift */; };
+		000000000000000000300009 /* iShuttle/Features/Reservations/Presentation/ReservationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200009 /* iShuttle/Features/Reservations/Presentation/ReservationViewModel.swift */; };
+		000000000000000000300010 /* iShuttle/Core/Networking/WProcResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200010 /* iShuttle/Core/Networking/WProcResponse.swift */; };
+		000000000000000000300011 /* iShuttle/Features/Location/Infrastructure/LocationDirectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200011 /* iShuttle/Features/Location/Infrastructure/LocationDirectionService.swift */; };
+		000000000000000000300012 /* iShuttle/Features/WatchSync/Infrastructure/WatchSyncService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200012 /* iShuttle/Features/WatchSync/Infrastructure/WatchSyncService.swift */; };
+		000000000000000000300013 /* iShuttle/Features/Reservations/Domain/ReservationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200013 /* iShuttle/Features/Reservations/Domain/ReservationRepository.swift */; };
+		000000000000000000300014 /* iShuttle/Features/Reservations/Infrastructure/DefaultReservationRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200014 /* iShuttle/Features/Reservations/Infrastructure/DefaultReservationRepository.swift */; };
+		000000000000000000300015 /* iShuttle/Features/Reservations/Application/ReservationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200015 /* iShuttle/Features/Reservations/Application/ReservationService.swift */; };
+		000000000000000000300016 /* iShuttle/Features/Settings/Domain/AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200016 /* iShuttle/Features/Settings/Domain/AppSettings.swift */; };
+		000000000000000000300017 /* iShuttle/Features/Settings/Infrastructure/UserDefaultsSettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200017 /* iShuttle/Features/Settings/Infrastructure/UserDefaultsSettingsRepository.swift */; };
+		000000000000000000300018 /* iShuttle/Features/Settings/Domain/SettingsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200018 /* iShuttle/Features/Settings/Domain/SettingsRepository.swift */; };
 		000000000000000000300019 /* iShuttle/Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200019 /* iShuttle/Assets.xcassets */; };
+		000000000000000000300020 /* iShuttle/Features/Authentication/Infrastructure/KeychainSessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200020 /* iShuttle/Features/Authentication/Infrastructure/KeychainSessionRepository.swift */; };
+		000000000000000000300021 /* iShuttle/Features/Authentication/Domain/SessionRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200021 /* iShuttle/Features/Authentication/Domain/SessionRepository.swift */; };
+		000000000000000000300022 /* iShuttle/Features/Reservations/Domain/BusOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200022 /* iShuttle/Features/Reservations/Domain/BusOption.swift */; };
+		000000000000000000300023 /* iShuttle/Features/Authentication/Domain/AuthChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200023 /* iShuttle/Features/Authentication/Domain/AuthChallenge.swift */; };
+		000000000000000000300024 /* iShuttle/Core/Networking/APIError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200024 /* iShuttle/Core/Networking/APIError.swift */; };
+		000000000000000000300025 /* iShuttle/App/AppContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200025 /* iShuttle/App/AppContainer.swift */; };
+		000000000000000000300026 /* iShuttle/Features/Authentication/Presentation/LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200026 /* iShuttle/Features/Authentication/Presentation/LoginView.swift */; };
+		000000000000000000300027 /* iShuttle/Features/Settings/Presentation/SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200027 /* iShuttle/Features/Settings/Presentation/SettingsView.swift */; };
+		000000000000000000300028 /* iShuttle/Features/Reservations/Presentation/ReservationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200028 /* iShuttle/Features/Reservations/Presentation/ReservationView.swift */; };
+		000000000000000000300029 /* iShuttle/Features/Reservations/Presentation/WeekDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200029 /* iShuttle/Features/Reservations/Presentation/WeekDatePicker.swift */; };
+		000000000000000000300030 /* iShuttle/Features/Reservations/Presentation/MyReservationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200030 /* iShuttle/Features/Reservations/Presentation/MyReservationsView.swift */; };
+		000000000000000000300031 /* iShuttle/Features/Reservations/Presentation/ReservationQRCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200031 /* iShuttle/Features/Reservations/Presentation/ReservationQRCodeView.swift */; };
+		000000000000000000300032 /* iShuttle/Features/Reservations/Presentation/QRHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200032 /* iShuttle/Features/Reservations/Presentation/QRHomeView.swift */; };
+		000000000000000000300033 /* iShuttle/Features/WatchSync/Domain/WatchReservationTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 000000000000000000200033 /* iShuttle/Features/WatchSync/Domain/WatchReservationTransfer.swift */; };
 		31F7528D3050799F00813BCE /* iShuttleWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 31F752833050799D00813BCE /* iShuttleWatch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
@@ -58,28 +70,40 @@
 
 /* Begin PBXFileReference section */
 		000000000000000000000030 /* iShuttle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iShuttle.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		000000000000000000200000 /* iShuttle/iShuttleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/iShuttleApp.swift; sourceTree = "<group>"; };
-		000000000000000000200001 /* iShuttle/Infrastructure/Networking/RSA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Networking/RSA.swift; sourceTree = "<group>"; };
-		000000000000000000200002 /* iShuttle/Infrastructure/Networking/AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Networking/AuthService.swift; sourceTree = "<group>"; };
-		000000000000000000200003 /* iShuttle/Infrastructure/Networking/ReservationAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Networking/ReservationAPI.swift; sourceTree = "<group>"; };
-		000000000000000000200004 /* iShuttle/Infrastructure/Persistence/ReservationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Persistence/ReservationStore.swift; sourceTree = "<group>"; };
-		000000000000000000200005 /* iShuttle/Infrastructure/Authentication/KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Authentication/KeychainStore.swift; sourceTree = "<group>"; };
-		000000000000000000200020 /* iShuttle/Infrastructure/Authentication/KeychainSessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Authentication/KeychainSessionRepository.swift; sourceTree = "<group>"; };
-		000000000000000000200006 /* iShuttle/Domain/Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Domain/Models.swift; sourceTree = "<group>"; };
-		000000000000000000200007 /* iShuttle/Presentation/RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Presentation/RootView.swift; sourceTree = "<group>"; };
-		000000000000000000200008 /* iShuttle/Domain/RouteLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Domain/RouteLogic.swift; sourceTree = "<group>"; };
-		000000000000000000200009 /* iShuttle/Presentation/ReservationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Presentation/ReservationViewModel.swift; sourceTree = "<group>"; };
-		000000000000000000200010 /* iShuttle/Infrastructure/Networking/WProcResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Networking/WProcResponse.swift; sourceTree = "<group>"; };
-		000000000000000000200011 /* iShuttle/Infrastructure/Location/LocationDirectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Location/LocationDirectionService.swift; sourceTree = "<group>"; };
-		000000000000000000200012 /* iShuttle/Infrastructure/Connectivity/WatchSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Connectivity/WatchSyncService.swift; sourceTree = "<group>"; };
-		000000000000000000200013 /* iShuttle/Domain/Repositories/ReservationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Domain/Repositories/ReservationRepository.swift; sourceTree = "<group>"; };
-		000000000000000000200014 /* iShuttle/Infrastructure/Repositories/DefaultReservationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Repositories/DefaultReservationRepository.swift; sourceTree = "<group>"; };
-		000000000000000000200015 /* iShuttle/Application/Services/ReservationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Application/Services/ReservationService.swift; sourceTree = "<group>"; };
-		000000000000000000200016 /* iShuttle/Domain/AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Domain/AppSettings.swift; sourceTree = "<group>"; };
-		000000000000000000200017 /* iShuttle/Infrastructure/Repositories/UserDefaultsSettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Infrastructure/Repositories/UserDefaultsSettingsRepository.swift; sourceTree = "<group>"; };
-		000000000000000000200018 /* iShuttle/Domain/Repositories/SettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Domain/Repositories/SettingsRepository.swift; sourceTree = "<group>"; };
-		000000000000000000200021 /* iShuttle/Domain/Repositories/SessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Domain/Repositories/SessionRepository.swift; sourceTree = "<group>"; };
+		000000000000000000200000 /* iShuttle/App/iShuttleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/App/iShuttleApp.swift; sourceTree = "<group>"; };
+		000000000000000000200001 /* iShuttle/Features/Authentication/Infrastructure/RSA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Authentication/Infrastructure/RSA.swift; sourceTree = "<group>"; };
+		000000000000000000200002 /* iShuttle/Features/Authentication/Infrastructure/AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Authentication/Infrastructure/AuthService.swift; sourceTree = "<group>"; };
+		000000000000000000200003 /* iShuttle/Features/Reservations/Infrastructure/ReservationAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Reservations/Infrastructure/ReservationAPI.swift; sourceTree = "<group>"; };
+		000000000000000000200004 /* iShuttle/Features/Reservations/Infrastructure/ReservationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Reservations/Infrastructure/ReservationStore.swift; sourceTree = "<group>"; };
+		000000000000000000200005 /* iShuttle/Core/Security/KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Core/Security/KeychainStore.swift; sourceTree = "<group>"; };
+		000000000000000000200006 /* iShuttle/Features/Reservations/Domain/Reservation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Reservations/Domain/Reservation.swift; sourceTree = "<group>"; };
+		000000000000000000200007 /* iShuttle/App/RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/App/RootView.swift; sourceTree = "<group>"; };
+		000000000000000000200008 /* iShuttle/Features/Reservations/Domain/RouteLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Reservations/Domain/RouteLogic.swift; sourceTree = "<group>"; };
+		000000000000000000200009 /* iShuttle/Features/Reservations/Presentation/ReservationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Reservations/Presentation/ReservationViewModel.swift; sourceTree = "<group>"; };
+		000000000000000000200010 /* iShuttle/Core/Networking/WProcResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Core/Networking/WProcResponse.swift; sourceTree = "<group>"; };
+		000000000000000000200011 /* iShuttle/Features/Location/Infrastructure/LocationDirectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Location/Infrastructure/LocationDirectionService.swift; sourceTree = "<group>"; };
+		000000000000000000200012 /* iShuttle/Features/WatchSync/Infrastructure/WatchSyncService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/WatchSync/Infrastructure/WatchSyncService.swift; sourceTree = "<group>"; };
+		000000000000000000200013 /* iShuttle/Features/Reservations/Domain/ReservationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Reservations/Domain/ReservationRepository.swift; sourceTree = "<group>"; };
+		000000000000000000200014 /* iShuttle/Features/Reservations/Infrastructure/DefaultReservationRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Reservations/Infrastructure/DefaultReservationRepository.swift; sourceTree = "<group>"; };
+		000000000000000000200015 /* iShuttle/Features/Reservations/Application/ReservationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Reservations/Application/ReservationService.swift; sourceTree = "<group>"; };
+		000000000000000000200016 /* iShuttle/Features/Settings/Domain/AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Settings/Domain/AppSettings.swift; sourceTree = "<group>"; };
+		000000000000000000200017 /* iShuttle/Features/Settings/Infrastructure/UserDefaultsSettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Settings/Infrastructure/UserDefaultsSettingsRepository.swift; sourceTree = "<group>"; };
+		000000000000000000200018 /* iShuttle/Features/Settings/Domain/SettingsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Settings/Domain/SettingsRepository.swift; sourceTree = "<group>"; };
 		000000000000000000200019 /* iShuttle/Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = iShuttle/Assets.xcassets; sourceTree = "<group>"; };
+		000000000000000000200020 /* iShuttle/Features/Authentication/Infrastructure/KeychainSessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Authentication/Infrastructure/KeychainSessionRepository.swift; sourceTree = "<group>"; };
+		000000000000000000200021 /* iShuttle/Features/Authentication/Domain/SessionRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Authentication/Domain/SessionRepository.swift; sourceTree = "<group>"; };
+		000000000000000000200022 /* iShuttle/Features/Reservations/Domain/BusOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Reservations/Domain/BusOption.swift; sourceTree = "<group>"; };
+		000000000000000000200023 /* iShuttle/Features/Authentication/Domain/AuthChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Authentication/Domain/AuthChallenge.swift; sourceTree = "<group>"; };
+		000000000000000000200024 /* iShuttle/Core/Networking/APIError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Core/Networking/APIError.swift; sourceTree = "<group>"; };
+		000000000000000000200025 /* iShuttle/App/AppContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/App/AppContainer.swift; sourceTree = "<group>"; };
+		000000000000000000200026 /* iShuttle/Features/Authentication/Presentation/LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Authentication/Presentation/LoginView.swift; sourceTree = "<group>"; };
+		000000000000000000200027 /* iShuttle/Features/Settings/Presentation/SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Settings/Presentation/SettingsView.swift; sourceTree = "<group>"; };
+		000000000000000000200028 /* iShuttle/Features/Reservations/Presentation/ReservationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Reservations/Presentation/ReservationView.swift; sourceTree = "<group>"; };
+		000000000000000000200029 /* iShuttle/Features/Reservations/Presentation/WeekDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Reservations/Presentation/WeekDatePicker.swift; sourceTree = "<group>"; };
+		000000000000000000200030 /* iShuttle/Features/Reservations/Presentation/MyReservationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Reservations/Presentation/MyReservationsView.swift; sourceTree = "<group>"; };
+		000000000000000000200031 /* iShuttle/Features/Reservations/Presentation/ReservationQRCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Reservations/Presentation/ReservationQRCodeView.swift; sourceTree = "<group>"; };
+		000000000000000000200032 /* iShuttle/Features/Reservations/Presentation/QRHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/Reservations/Presentation/QRHomeView.swift; sourceTree = "<group>"; };
+		000000000000000000200033 /* iShuttle/Features/WatchSync/Domain/WatchReservationTransfer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iShuttle/Features/WatchSync/Domain/WatchReservationTransfer.swift; sourceTree = "<group>"; };
 		31F752833050799D00813BCE /* iShuttleWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iShuttleWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -121,27 +145,39 @@
 		319A1F6B305040E500A0975F /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				000000000000000000200000 /* iShuttle/iShuttleApp.swift */,
-				000000000000000000200001 /* iShuttle/Infrastructure/Networking/RSA.swift */,
-				000000000000000000200002 /* iShuttle/Infrastructure/Networking/AuthService.swift */,
-				000000000000000000200003 /* iShuttle/Infrastructure/Networking/ReservationAPI.swift */,
-				000000000000000000200004 /* iShuttle/Infrastructure/Persistence/ReservationStore.swift */,
-				000000000000000000200005 /* iShuttle/Infrastructure/Authentication/KeychainStore.swift */,
-				000000000000000000200020 /* iShuttle/Infrastructure/Authentication/KeychainSessionRepository.swift */,
-				000000000000000000200006 /* iShuttle/Domain/Models.swift */,
-				000000000000000000200007 /* iShuttle/Presentation/RootView.swift */,
-				000000000000000000200008 /* iShuttle/Domain/RouteLogic.swift */,
-				000000000000000000200009 /* iShuttle/Presentation/ReservationViewModel.swift */,
-				000000000000000000200010 /* iShuttle/Infrastructure/Networking/WProcResponse.swift */,
-				000000000000000000200011 /* iShuttle/Infrastructure/Location/LocationDirectionService.swift */,
-				000000000000000000200012 /* iShuttle/Infrastructure/Connectivity/WatchSyncService.swift */,
-				000000000000000000200013 /* iShuttle/Domain/Repositories/ReservationRepository.swift */,
-				000000000000000000200014 /* iShuttle/Infrastructure/Repositories/DefaultReservationRepository.swift */,
-				000000000000000000200015 /* iShuttle/Application/Services/ReservationService.swift */,
-				000000000000000000200016 /* iShuttle/Domain/AppSettings.swift */,
-				000000000000000000200017 /* iShuttle/Infrastructure/Repositories/UserDefaultsSettingsRepository.swift */,
-				000000000000000000200018 /* iShuttle/Domain/Repositories/SettingsRepository.swift */,
-				000000000000000000200021 /* iShuttle/Domain/Repositories/SessionRepository.swift */,
+				000000000000000000200000 /* iShuttle/App/iShuttleApp.swift */,
+				000000000000000000200001 /* iShuttle/Features/Authentication/Infrastructure/RSA.swift */,
+				000000000000000000200002 /* iShuttle/Features/Authentication/Infrastructure/AuthService.swift */,
+				000000000000000000200003 /* iShuttle/Features/Reservations/Infrastructure/ReservationAPI.swift */,
+				000000000000000000200004 /* iShuttle/Features/Reservations/Infrastructure/ReservationStore.swift */,
+				000000000000000000200005 /* iShuttle/Core/Security/KeychainStore.swift */,
+				000000000000000000200020 /* iShuttle/Features/Authentication/Infrastructure/KeychainSessionRepository.swift */,
+				000000000000000000200006 /* iShuttle/Features/Reservations/Domain/Reservation.swift */,
+				000000000000000000200007 /* iShuttle/App/RootView.swift */,
+				000000000000000000200008 /* iShuttle/Features/Reservations/Domain/RouteLogic.swift */,
+				000000000000000000200009 /* iShuttle/Features/Reservations/Presentation/ReservationViewModel.swift */,
+				000000000000000000200010 /* iShuttle/Core/Networking/WProcResponse.swift */,
+				000000000000000000200011 /* iShuttle/Features/Location/Infrastructure/LocationDirectionService.swift */,
+				000000000000000000200012 /* iShuttle/Features/WatchSync/Infrastructure/WatchSyncService.swift */,
+				000000000000000000200013 /* iShuttle/Features/Reservations/Domain/ReservationRepository.swift */,
+				000000000000000000200014 /* iShuttle/Features/Reservations/Infrastructure/DefaultReservationRepository.swift */,
+				000000000000000000200015 /* iShuttle/Features/Reservations/Application/ReservationService.swift */,
+				000000000000000000200016 /* iShuttle/Features/Settings/Domain/AppSettings.swift */,
+				000000000000000000200017 /* iShuttle/Features/Settings/Infrastructure/UserDefaultsSettingsRepository.swift */,
+				000000000000000000200018 /* iShuttle/Features/Settings/Domain/SettingsRepository.swift */,
+				000000000000000000200021 /* iShuttle/Features/Authentication/Domain/SessionRepository.swift */,
+				000000000000000000200022 /* iShuttle/Features/Reservations/Domain/BusOption.swift */,
+				000000000000000000200023 /* iShuttle/Features/Authentication/Domain/AuthChallenge.swift */,
+				000000000000000000200024 /* iShuttle/Core/Networking/APIError.swift */,
+				000000000000000000200025 /* iShuttle/App/AppContainer.swift */,
+				000000000000000000200026 /* iShuttle/Features/Authentication/Presentation/LoginView.swift */,
+				000000000000000000200027 /* iShuttle/Features/Settings/Presentation/SettingsView.swift */,
+				000000000000000000200028 /* iShuttle/Features/Reservations/Presentation/ReservationView.swift */,
+				000000000000000000200029 /* iShuttle/Features/Reservations/Presentation/WeekDatePicker.swift */,
+				000000000000000000200030 /* iShuttle/Features/Reservations/Presentation/MyReservationsView.swift */,
+				000000000000000000200031 /* iShuttle/Features/Reservations/Presentation/ReservationQRCodeView.swift */,
+				000000000000000000200032 /* iShuttle/Features/Reservations/Presentation/QRHomeView.swift */,
+				000000000000000000200033 /* iShuttle/Features/WatchSync/Domain/WatchReservationTransfer.swift */,
 				000000000000000000200019 /* iShuttle/Assets.xcassets */,
 			);
 			name = "Recovered References";
@@ -248,27 +284,39 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				000000000000000000300000 /* iShuttle/iShuttleApp.swift in Sources */,
-				000000000000000000300001 /* iShuttle/Infrastructure/Networking/RSA.swift in Sources */,
-				000000000000000000300002 /* iShuttle/Infrastructure/Networking/AuthService.swift in Sources */,
-				000000000000000000300003 /* iShuttle/Infrastructure/Networking/ReservationAPI.swift in Sources */,
-				000000000000000000300004 /* iShuttle/Infrastructure/Persistence/ReservationStore.swift in Sources */,
-				000000000000000000300005 /* iShuttle/Infrastructure/Authentication/KeychainStore.swift in Sources */,
-				000000000000000000300020 /* iShuttle/Infrastructure/Authentication/KeychainSessionRepository.swift in Sources */,
-				000000000000000000300006 /* iShuttle/Domain/Models.swift in Sources */,
-				000000000000000000300007 /* iShuttle/Presentation/RootView.swift in Sources */,
-				000000000000000000300008 /* iShuttle/Domain/RouteLogic.swift in Sources */,
-				000000000000000000300009 /* iShuttle/Presentation/ReservationViewModel.swift in Sources */,
-				000000000000000000300010 /* iShuttle/Infrastructure/Networking/WProcResponse.swift in Sources */,
-				000000000000000000300011 /* iShuttle/Infrastructure/Location/LocationDirectionService.swift in Sources */,
-				000000000000000000300012 /* iShuttle/Infrastructure/Connectivity/WatchSyncService.swift in Sources */,
-				000000000000000000300013 /* iShuttle/Domain/Repositories/ReservationRepository.swift in Sources */,
-				000000000000000000300014 /* iShuttle/Infrastructure/Repositories/DefaultReservationRepository.swift in Sources */,
-				000000000000000000300015 /* iShuttle/Application/Services/ReservationService.swift in Sources */,
-				000000000000000000300016 /* iShuttle/Domain/AppSettings.swift in Sources */,
-				000000000000000000300017 /* iShuttle/Infrastructure/Repositories/UserDefaultsSettingsRepository.swift in Sources */,
-				000000000000000000300018 /* iShuttle/Domain/Repositories/SettingsRepository.swift in Sources */,
-				000000000000000000300021 /* iShuttle/Domain/Repositories/SessionRepository.swift in Sources */,
+				000000000000000000300000 /* iShuttle/App/iShuttleApp.swift in Sources */,
+				000000000000000000300001 /* iShuttle/Features/Authentication/Infrastructure/RSA.swift in Sources */,
+				000000000000000000300002 /* iShuttle/Features/Authentication/Infrastructure/AuthService.swift in Sources */,
+				000000000000000000300003 /* iShuttle/Features/Reservations/Infrastructure/ReservationAPI.swift in Sources */,
+				000000000000000000300004 /* iShuttle/Features/Reservations/Infrastructure/ReservationStore.swift in Sources */,
+				000000000000000000300005 /* iShuttle/Core/Security/KeychainStore.swift in Sources */,
+				000000000000000000300020 /* iShuttle/Features/Authentication/Infrastructure/KeychainSessionRepository.swift in Sources */,
+				000000000000000000300006 /* iShuttle/Features/Reservations/Domain/Reservation.swift in Sources */,
+				000000000000000000300007 /* iShuttle/App/RootView.swift in Sources */,
+				000000000000000000300008 /* iShuttle/Features/Reservations/Domain/RouteLogic.swift in Sources */,
+				000000000000000000300009 /* iShuttle/Features/Reservations/Presentation/ReservationViewModel.swift in Sources */,
+				000000000000000000300010 /* iShuttle/Core/Networking/WProcResponse.swift in Sources */,
+				000000000000000000300011 /* iShuttle/Features/Location/Infrastructure/LocationDirectionService.swift in Sources */,
+				000000000000000000300012 /* iShuttle/Features/WatchSync/Infrastructure/WatchSyncService.swift in Sources */,
+				000000000000000000300013 /* iShuttle/Features/Reservations/Domain/ReservationRepository.swift in Sources */,
+				000000000000000000300014 /* iShuttle/Features/Reservations/Infrastructure/DefaultReservationRepository.swift in Sources */,
+				000000000000000000300015 /* iShuttle/Features/Reservations/Application/ReservationService.swift in Sources */,
+				000000000000000000300016 /* iShuttle/Features/Settings/Domain/AppSettings.swift in Sources */,
+				000000000000000000300017 /* iShuttle/Features/Settings/Infrastructure/UserDefaultsSettingsRepository.swift in Sources */,
+				000000000000000000300018 /* iShuttle/Features/Settings/Domain/SettingsRepository.swift in Sources */,
+				000000000000000000300021 /* iShuttle/Features/Authentication/Domain/SessionRepository.swift in Sources */,
+				000000000000000000300022 /* iShuttle/Features/Reservations/Domain/BusOption.swift in Sources */,
+				000000000000000000300023 /* iShuttle/Features/Authentication/Domain/AuthChallenge.swift in Sources */,
+				000000000000000000300024 /* iShuttle/Core/Networking/APIError.swift in Sources */,
+				000000000000000000300025 /* iShuttle/App/AppContainer.swift in Sources */,
+				000000000000000000300026 /* iShuttle/Features/Authentication/Presentation/LoginView.swift in Sources */,
+				000000000000000000300027 /* iShuttle/Features/Settings/Presentation/SettingsView.swift in Sources */,
+				000000000000000000300028 /* iShuttle/Features/Reservations/Presentation/ReservationView.swift in Sources */,
+				000000000000000000300029 /* iShuttle/Features/Reservations/Presentation/WeekDatePicker.swift in Sources */,
+				000000000000000000300030 /* iShuttle/Features/Reservations/Presentation/MyReservationsView.swift in Sources */,
+				000000000000000000300031 /* iShuttle/Features/Reservations/Presentation/ReservationQRCodeView.swift in Sources */,
+				000000000000000000300032 /* iShuttle/Features/Reservations/Presentation/QRHomeView.swift in Sources */,
+				000000000000000000300033 /* iShuttle/Features/WatchSync/Domain/WatchReservationTransfer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

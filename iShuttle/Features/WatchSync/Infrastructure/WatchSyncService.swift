@@ -101,17 +101,3 @@ final class WatchSyncService: NSObject, WCSessionDelegate {
         return UIImage(cgImage: cgImage).pngData()
     }
 }
-
-private struct WatchReservationTransfer: Codable {
-    let id: String
-    let hallAppointmentDataID: String
-    let routeName: String
-    let departure: Date
-    let qrCodePayload: String
-    let qrCodeImageData: Data?
-}
-
-private struct WatchReservationEnvelope: Codable {
-    let reservations: [WatchReservationTransfer]
-    let expirationInterval: TimeInterval
-}
