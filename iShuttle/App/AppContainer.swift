@@ -60,10 +60,10 @@ final class AppContainer: ObservableObject {
         watchSync.sync(cached, maxCount: maxCount, expirationInterval: reservationRepository.expirationInterval)
     }
 
-    func syncWatchData() async -> Int {
+    func syncWatchData() async -> WatchSyncResult {
         let currentSettings = settingsRepository.load()
         let cached = await reservations.all()
-        return watchSync.sync(
+        return await watchSync.syncAndConfirm(
             cached,
             maxCount: currentSettings.watchMaxReservationCount,
             expirationInterval: currentSettings.watchExpirationMinutes * 60

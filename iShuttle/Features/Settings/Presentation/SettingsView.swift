@@ -55,9 +55,9 @@ struct SettingsView: View {
                     Button {
                         Task {
                             isSyncingWatch = true
-                            let count = await container.syncWatchData()
+                            let result = await container.syncWatchData()
                             isSyncingWatch = false
-                            watchSyncMessage = "已同步 \(count) 条预约"
+                            watchSyncMessage = result.displayMessage
                             try? await Task.sleep(for: .seconds(2))
                             watchSyncMessage = nil
                         }

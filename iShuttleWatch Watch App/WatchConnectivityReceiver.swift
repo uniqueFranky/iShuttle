@@ -48,10 +48,12 @@ final class WatchConnectivityReceiver: NSObject, ObservableObject, WCSessionDele
     @MainActor
     private func consume(_ context: [String: Any], source: String) {
         logger.info("处理 context source=\(source, privacy: .public)，keys=\(context.keys.sorted().joined(separator: ","), privacy: .public)")
+        let contextSyncID = context["watchSyncID"] as? String
         guard let raw = context["reservations"] else {
             if context["clear"] as? Bool == true {
                 logger.info("收到 clear 标记，清除 Watch 本地预约")
                 store.clearReservations()
+                sendAcknowledgement(syncID: contextSyncID, count: 0)
             } else {
                 logger.warning("context 没有 reservation 或 clear 标记，忽略")
             }
@@ -67,13 +69,46 @@ final class WatchConnectivityReceiver: NSObject, ObservableObject, WCSessionDele
             logger.info("解码成功 count=\(envelope.reservations.count, privacy: .public)，expirationMinutes=\(envelope.expirationInterval / 60, privacy: .public)")
             store.save(envelope.reservations, expirationInterval: envelope.expirationInterval)
             logger.info("已交给 WatchReservationStore 保存")
+            sendAcknowledgement(syncID: envelope.syncID, count: envelope.reservations.count)
         } catch {
             logger.error("WatchReservation 解码失败：\(error.localizedDescription, privacy: .public)")
         }
     }
+
+    private func sendAcknowledgement(syncID: String?, count: Int) {
+        guard let syncID else {
+            logger.warning("无法发送同步回执：syncID 为空")
+            return
+        }
+        guard WCSession.isSupported() else {
+            logger.warning("无法发送同步回执：WCSession 不受支持")
+            return
+        }
+        let payload: [String: Any] = [
+            "watchSyncAckID": syncID,
+            "watchSyncAckCount": count,
+            "watchSyncAckAt": Date().timeIntervalSince1970
+        ]
+        let session = WCSession.default
+        guard session.activationState == .activated else {
+            logger.warning("无法发送同步回执：session 尚未 activated")
+            return
+        }
+        if session.isReachable {
+            session.sendMessage(payload, replyHandler: nil) { error in
+                let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "iShuttleWatch", category: "WatchSync")
+                logger.error("sendMessage 同步回执失败：\(error.localizedDescription, privacy: .public)，改用 transferUserInfo")
+                session.transferUserInfo(payload)
+            }
+        } else {
+            session.transferUserInfo(payload)
+        }
+        logger.info("已发送同步回执 syncID=\(syncID, privacy: .public)，count=\(count, privacy: .public)，reachable=\(session.isReachable, privacy: .public)")
+    }
 }
 
 private struct WatchReservationEnvelope: Codable {
+    let syncID: String
     let reservations: [WatchReservation]
     let expirationInterval: TimeInterval
 }
