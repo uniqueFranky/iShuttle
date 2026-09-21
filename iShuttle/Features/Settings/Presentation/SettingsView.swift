@@ -6,6 +6,8 @@ struct SettingsView: View {
     @State private var themeMode: String
     @State private var watchMaxReservationCount: Int
     @State private var watchExpirationMinutes: Double
+    @State private var rideReminderEnabled: Bool
+    @State private var rideReminderAdvanceMinutes: Int
     @State private var isSyncingWatch = false
     @State private var watchSyncMessage: String?
     @State private var showingLogoutConfirmation = false
@@ -15,6 +17,8 @@ struct SettingsView: View {
         _themeMode = State(initialValue: container.settings.themeMode)
         _watchMaxReservationCount = State(initialValue: container.settings.watchMaxReservationCount)
         _watchExpirationMinutes = State(initialValue: container.settings.watchExpirationMinutes)
+        _rideReminderEnabled = State(initialValue: container.settings.rideReminderEnabled)
+        _rideReminderAdvanceMinutes = State(initialValue: container.settings.rideReminderAdvanceMinutes)
     }
 
     var body: some View {
@@ -47,6 +51,23 @@ struct SettingsView: View {
 
                 Section("班车预约") {
                     Stepper("预约过期时间：\(watchExpirationMinutes, specifier: "%.0f") 分钟", value: $watchExpirationMinutes, in: 1...60, step: 1)
+                }
+
+                Section("乘车提醒") {
+                    Toggle("启用乘车提醒", isOn: $rideReminderEnabled)
+                        .disabled(container.rideReminderAuthorization == .denied)
+                    if container.rideReminderAuthorization == .denied {
+                        Text("系统通知权限未开启，乘车提醒已关闭")
+                            .font(.footnote).foregroundStyle(.secondary)
+                        Button("去系统设置开启") { UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }
+                    } else if rideReminderEnabled && container.rideReminderAuthorization == .authorized {
+                        Stepper(
+                            "提前时长：\(rideReminderAdvanceMinutes) 分钟",
+                            value: $rideReminderAdvanceMinutes,
+                            in: 1...60,
+                            step: 1
+                        )
+                    }
                 }
 
                 Section("Apple Watch") {
@@ -97,6 +118,13 @@ struct SettingsView: View {
                 }
             }
             .animation(.easeInOut(duration: 0.2), value: watchSyncMessage)
+            .onChange(of: container.settings) { _, value in
+                themeMode = value.themeMode
+                watchMaxReservationCount = value.watchMaxReservationCount
+                watchExpirationMinutes = value.watchExpirationMinutes
+                rideReminderEnabled = value.rideReminderEnabled
+                rideReminderAdvanceMinutes = value.rideReminderAdvanceMinutes
+            }
             .onChange(of: watchMaxReservationCount) { _, value in
                 Task { await container.updateWatchSettings(maxCount: value, expirationMinutes: watchExpirationMinutes) }
             }
@@ -105,6 +133,13 @@ struct SettingsView: View {
             }
             .onChange(of: themeMode) { _, value in
                 container.updateThemeMode(value)
+            }
+            .onChange(of: rideReminderEnabled) { _, value in
+                Task { await container.updateRideReminderSettings(enabled: value, advanceMinutes: rideReminderAdvanceMinutes) }
+            }
+            .onChange(of: rideReminderAdvanceMinutes) { _, value in
+                guard value > 0 else { return }
+                Task { await container.updateRideReminderSettings(enabled: rideReminderEnabled, advanceMinutes: value) }
             }
             .confirmationDialog("确定要退出当前账号吗？", isPresented: $showingLogoutConfirmation, titleVisibility: .visible) {
                 Button("退出登录", role: .destructive) {

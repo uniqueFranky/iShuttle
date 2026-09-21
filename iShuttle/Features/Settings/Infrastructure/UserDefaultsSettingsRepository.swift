@@ -13,6 +13,8 @@ final class UserDefaultsSettingsRepository: SettingsRepository {
             themeMode: defaults.string(forKey: "themeMode") ?? fallback.themeMode,
             watchMaxReservationCount: defaults.object(forKey: "watchMaxReservationCount") as? Int ?? fallback.watchMaxReservationCount,
             watchExpirationMinutes: defaults.object(forKey: "watchExpirationMinutes") as? Double ?? fallback.watchExpirationMinutes
+            , rideReminderEnabled: defaults.object(forKey: "rideReminderEnabled") as? Bool ?? fallback.rideReminderEnabled
+            , rideReminderAdvanceMinutes: defaults.object(forKey: "rideReminderAdvanceMinutes") as? Int ?? fallback.rideReminderAdvanceMinutes
         )
     }
 
@@ -20,5 +22,7 @@ final class UserDefaultsSettingsRepository: SettingsRepository {
         defaults.set(settings.themeMode, forKey: "themeMode")
         defaults.set(settings.watchMaxReservationCount, forKey: "watchMaxReservationCount")
         defaults.set(settings.watchExpirationMinutes, forKey: "watchExpirationMinutes")
+        defaults.set(settings.rideReminderEnabled, forKey: "rideReminderEnabled")
+        defaults.set(settings.rideReminderAdvanceMinutes, forKey: "rideReminderAdvanceMinutes")
     }
 }
