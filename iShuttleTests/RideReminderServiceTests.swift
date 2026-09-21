@@ -119,6 +119,204 @@ final class RideReminderServiceTests: XCTestCase {
         XCTAssertEqual(scheduler.scheduleAttempts, 1)
     }
 
+    func testReservationPreferenceOverridesGlobalAdvanceTime() async {
+        let now = date(hour: 12)
+        let scheduler = ReminderSchedulerSpy()
+        let repository = InMemoryReminderRecordRepository()
+        let preferenceRepository = InMemoryReminderPreferenceRepository()
+        let service = makeService(
+            scheduler: scheduler,
+            repository: repository,
+            preferenceRepository: preferenceRepository,
+            now: now
+        )
+        let reservation = makeReservation(departure: date(hour: 13))
+
+        await service.updatePreference(
+            advanceMinutes: 20,
+            for: reservation,
+            reservations: [reservation],
+            settings: settings
+        )
+
+        XCTAssertEqual(scheduler.scheduled.last?.triggerDate, date(hour: 12, minute: 40))
+        XCTAssertEqual(service.preference(for: reservation)?.advanceMinutes, 20)
+    }
+
+    func testChangingGlobalTimeOnlyReplacesInheritedReminder() async {
+        let now = date(hour: 12)
+        let scheduler = ReminderSchedulerSpy()
+        let repository = InMemoryReminderRecordRepository()
+        let preferenceRepository = InMemoryReminderPreferenceRepository()
+        let service = makeService(
+            scheduler: scheduler,
+            repository: repository,
+            preferenceRepository: preferenceRepository,
+            now: now
+        )
+        let inherited = makeReservation(id: "inherited", departure: date(hour: 13))
+        let customized = makeReservation(id: "customized", departure: date(hour: 14))
+
+        await service.updatePreference(
+            advanceMinutes: 20,
+            for: customized,
+            reservations: [inherited, customized],
+            settings: settings
+        )
+        await service.rescheduleAll(
+            reservations: [inherited, customized],
+            settings: RideReminderSettings(enabled: true, advanceMinutes: 15)
+        )
+
+        XCTAssertEqual(scheduler.scheduleAttempts, 3)
+        XCTAssertEqual(scheduler.cancelledIDs, [inherited.id])
+        XCTAssertEqual(
+            scheduler.scheduled.last { $0.reservation.id == inherited.id }?.triggerDate,
+            date(hour: 12, minute: 45)
+        )
+        XCTAssertEqual(
+            scheduler.scheduled.last { $0.reservation.id == customized.id }?.triggerDate,
+            date(hour: 13, minute: 40)
+        )
+    }
+
+    func testClearingPreferenceReturnsReservationToGlobalTime() async {
+        let now = date(hour: 12)
+        let scheduler = ReminderSchedulerSpy()
+        let repository = InMemoryReminderRecordRepository()
+        let preferenceRepository = InMemoryReminderPreferenceRepository()
+        let service = makeService(
+            scheduler: scheduler,
+            repository: repository,
+            preferenceRepository: preferenceRepository,
+            now: now
+        )
+        let reservation = makeReservation(departure: date(hour: 13))
+
+        await service.updatePreference(
+            advanceMinutes: 20,
+            for: reservation,
+            reservations: [reservation],
+            settings: settings
+        )
+        await service.updatePreference(
+            advanceMinutes: nil,
+            for: reservation,
+            reservations: [reservation],
+            settings: settings
+        )
+
+        XCTAssertNil(service.preference(for: reservation))
+        XCTAssertEqual(scheduler.scheduleAttempts, 2)
+        XCTAssertEqual(scheduler.scheduled.last?.triggerDate, date(hour: 12, minute: 50))
+    }
+
+    func testDisabledRemindersPreserveReservationPreference() async {
+        let now = date(hour: 12)
+        let scheduler = ReminderSchedulerSpy()
+        let repository = InMemoryReminderRecordRepository()
+        let preferenceRepository = InMemoryReminderPreferenceRepository()
+        let service = makeService(
+            scheduler: scheduler,
+            repository: repository,
+            preferenceRepository: preferenceRepository,
+            now: now
+        )
+        let reservation = makeReservation(departure: date(hour: 13))
+
+        await service.updatePreference(
+            advanceMinutes: 20,
+            for: reservation,
+            reservations: [reservation],
+            settings: RideReminderSettings(enabled: false, advanceMinutes: 10)
+        )
+
+        XCTAssertEqual(service.preference(for: reservation)?.advanceMinutes, 20)
+        XCTAssertEqual(scheduler.scheduleAttempts, 0)
+    }
+
+    func testRemovedReservationCleansPreference() async {
+        let now = date(hour: 12)
+        let scheduler = ReminderSchedulerSpy()
+        let repository = InMemoryReminderRecordRepository()
+        let preferenceRepository = InMemoryReminderPreferenceRepository()
+        let service = makeService(
+            scheduler: scheduler,
+            repository: repository,
+            preferenceRepository: preferenceRepository,
+            now: now
+        )
+        let reservation = makeReservation(departure: date(hour: 13))
+
+        await service.updatePreference(
+            advanceMinutes: 20,
+            for: reservation,
+            reservations: [reservation],
+            settings: settings
+        )
+        await service.rescheduleAll(
+            reservations: [],
+            settings: settings,
+            removesStalePreferences: true
+        )
+
+        XCTAssertTrue(preferenceRepository.preferences.isEmpty)
+    }
+
+    func testNonAuthoritativeEmptyCachePreservesPreference() async {
+        let now = date(hour: 12)
+        let scheduler = ReminderSchedulerSpy()
+        let repository = InMemoryReminderRecordRepository()
+        let preferenceRepository = InMemoryReminderPreferenceRepository()
+        let service = makeService(
+            scheduler: scheduler,
+            repository: repository,
+            preferenceRepository: preferenceRepository,
+            now: now
+        )
+        let reservation = makeReservation(departure: date(hour: 13))
+
+        await service.updatePreference(
+            advanceMinutes: 20,
+            for: reservation,
+            reservations: [reservation],
+            settings: settings
+        )
+        await service.rescheduleAll(reservations: [], settings: settings)
+
+        XCTAssertEqual(service.preference(for: reservation)?.advanceMinutes, 20)
+    }
+
+    func testReusedReservationIDDoesNotInheritOldPreference() async {
+        let now = date(hour: 12)
+        let scheduler = ReminderSchedulerSpy()
+        let repository = InMemoryReminderRecordRepository()
+        let preferenceRepository = InMemoryReminderPreferenceRepository()
+        let service = makeService(
+            scheduler: scheduler,
+            repository: repository,
+            preferenceRepository: preferenceRepository,
+            now: now
+        )
+        let original = makeReservation(departure: date(hour: 13))
+        let replacement = makeReservation(departure: date(hour: 14))
+
+        await service.updatePreference(
+            advanceMinutes: 20,
+            for: original,
+            reservations: [original],
+            settings: settings
+        )
+        await service.rescheduleAll(
+            reservations: [replacement],
+            settings: settings,
+            removesStalePreferences: true
+        )
+
+        XCTAssertNil(service.preference(for: replacement))
+        XCTAssertEqual(scheduler.scheduled.last?.triggerDate, date(hour: 13, minute: 50))
+    }
+
     func testRemovedReservationCleansNotificationAndRecord() async {
         let now = date(hour: 12)
         let scheduler = ReminderSchedulerSpy()
@@ -188,14 +386,26 @@ final class RideReminderServiceTests: XCTestCase {
         let now = date(hour: 12)
         let scheduler = ReminderSchedulerSpy()
         let repository = InMemoryReminderRecordRepository()
-        let service = makeService(scheduler: scheduler, repository: repository, now: now)
+        let preferenceRepository = InMemoryReminderPreferenceRepository()
+        let service = makeService(
+            scheduler: scheduler,
+            repository: repository,
+            preferenceRepository: preferenceRepository,
+            now: now
+        )
         let reservation = makeReservation(departure: date(hour: 13))
 
-        await service.rescheduleAll(reservations: [reservation], settings: settings)
+        await service.updatePreference(
+            advanceMinutes: 20,
+            for: reservation,
+            reservations: [reservation],
+            settings: settings
+        )
         await service.reset()
 
         XCTAssertEqual(scheduler.cancelAllCount, 1)
         XCTAssertTrue(repository.records.isEmpty)
+        XCTAssertTrue(preferenceRepository.preferences.isEmpty)
     }
 
     func testUserDefaultsRepositoryPersistsRecords() {
@@ -219,25 +429,57 @@ final class RideReminderServiceTests: XCTestCase {
         XCTAssertTrue(repository.load().isEmpty)
     }
 
+    func testUserDefaultsRepositoryPersistsPreferences() {
+        let suiteName = "RideReminderServiceTests.\(UUID().uuidString)"
+        let defaults = UserDefaults(suiteName: suiteName)!
+        defer { defaults.removePersistentDomain(forName: suiteName) }
+        let repository = UserDefaultsRideReminderPreferenceRepository(
+            defaults: defaults,
+            key: "preferences"
+        )
+        let preference = RideReminderPreference(
+            reservationID: "reservation-1",
+            departure: date(hour: 13),
+            advanceMinutes: 20
+        )
+
+        repository.save([preference])
+        XCTAssertEqual(repository.load(), [preference])
+
+        repository.removeAll()
+        XCTAssertTrue(repository.load().isEmpty)
+    }
+
     private func makeService(
         scheduler: ReminderSchedulerSpy,
         repository: InMemoryReminderRecordRepository,
+        preferenceRepository: InMemoryReminderPreferenceRepository = InMemoryReminderPreferenceRepository(),
         now: @escaping () -> Date
     ) -> RideReminderService {
-        RideReminderService(scheduler: scheduler, recordRepository: repository, now: now)
+        RideReminderService(
+            scheduler: scheduler,
+            recordRepository: repository,
+            preferenceRepository: preferenceRepository,
+            now: now
+        )
     }
 
     private func makeService(
         scheduler: ReminderSchedulerSpy,
         repository: InMemoryReminderRecordRepository,
+        preferenceRepository: InMemoryReminderPreferenceRepository = InMemoryReminderPreferenceRepository(),
         now: Date
     ) -> RideReminderService {
-        makeService(scheduler: scheduler, repository: repository) { now }
+        makeService(
+            scheduler: scheduler,
+            repository: repository,
+            preferenceRepository: preferenceRepository
+        ) { now }
     }
 
-    private func makeReservation(departure: Date) -> Reservation {
+    private func makeReservation(id: String = "reservation-1", departure: Date) -> Reservation {
         Reservation(
-            id: "reservation-1",
+            id: id,
             hallAppointmentDataID: "period-1",
             routeName: "燕园至昌平",
             departure: departure,
@@ -264,6 +506,14 @@ private final class InMemoryReminderRecordRepository: RideReminderRecordReposito
     func load() -> [RideReminderScheduleRecord] { records }
     func save(_ records: [RideReminderScheduleRecord]) { self.records = records }
     func removeAll() { records.removeAll() }
+}
+
+private final class InMemoryReminderPreferenceRepository: RideReminderPreferenceRepository {
+    var preferences: [RideReminderPreference] = []
+
+    func load() -> [RideReminderPreference] { preferences }
+    func save(_ preferences: [RideReminderPreference]) { self.preferences = preferences }
+    func removeAll() { preferences.removeAll() }
 }
 
 private final class ReminderSchedulerSpy: RideReminderScheduler {

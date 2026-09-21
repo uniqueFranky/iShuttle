@@ -6,6 +6,7 @@ struct MyReservationsView: View {
     @ObservedObject var container: AppContainer
     @StateObject private var viewModel: ReservationViewModel
     @State private var selectedReservation: Reservation?
+    @State private var reminderReservation: Reservation?
 
     init(store: ReservationStore, container: AppContainer) {
         self.store = store
@@ -44,6 +45,12 @@ struct MyReservationsView: View {
                                 Label("二维码", systemImage: "qrcode")
                             }
                             .tint(.blue)
+                            Button {
+                                reminderReservation = reservation
+                            } label: {
+                                Label("提醒", systemImage: "bell")
+                            }
+                            .tint(.orange)
                             Button(role: .destructive) {
                                 Task { await viewModel.cancel(reservation) }
                             } label: {
@@ -87,6 +94,21 @@ struct MyReservationsView: View {
             .refreshable { await viewModel.refreshReservations() }
             .sheet(item: $selectedReservation) { reservation in
                 ReservationQRCodeView(reservation: reservation, service: container.reservationService)
+            }
+            .sheet(item: $reminderReservation) { reservation in
+                ReservationReminderSettingsView(
+                    reservation: reservation,
+                    globalSettings: RideReminderSettings(
+                        enabled: container.settings.rideReminderEnabled,
+                        advanceMinutes: container.settings.rideReminderAdvanceMinutes
+                    ),
+                    preference: container.rideReminderPreference(for: reservation)
+                ) { advanceMinutes in
+                    await container.updateRideReminderPreference(
+                        advanceMinutes: advanceMinutes,
+                        for: reservation
+                    )
+                }
             }
             .alert("操作失败", isPresented: Binding(
                 get: { viewModel.errorMessage != nil },

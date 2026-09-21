@@ -31,7 +31,8 @@ final class AppContainer: ObservableObject {
         self.watchSync = watchSync
         let reminderService = RideReminderService(
             scheduler: UserNotificationReminderScheduler(),
-            recordRepository: UserDefaultsRideReminderRecordRepository()
+            recordRepository: UserDefaultsRideReminderRecordRepository(),
+            preferenceRepository: UserDefaultsRideReminderPreferenceRepository()
         )
         self.rideReminderService = reminderService
         let settingsRepository = UserDefaultsSettingsRepository()
@@ -50,7 +51,16 @@ final class AppContainer: ObservableObject {
         reservationService = ReservationService(repository: repository, onReservationsChanged: { values in
             let currentSettings = settingsRepository.load()
             watchSync.sync(values, maxCount: currentSettings.watchMaxReservationCount, expirationInterval: repository.expirationInterval)
-            Task { await reminderService.rescheduleAll(reservations: values, settings: RideReminderSettings(enabled: currentSettings.rideReminderEnabled, advanceMinutes: currentSettings.rideReminderAdvanceMinutes)) }
+            Task {
+                await reminderService.rescheduleAll(
+                    reservations: values,
+                    settings: RideReminderSettings(
+                        enabled: currentSettings.rideReminderEnabled,
+                        advanceMinutes: currentSettings.rideReminderAdvanceMinutes
+                    ),
+                    removesStalePreferences: true
+                )
+            }
         })
         sessionRepository.restoreSession(into: session)
         isAuthenticated = sessionRepository.currentUsername() != nil
@@ -108,6 +118,27 @@ final class AppContainer: ObservableObject {
         settingsRepository.save(updated); settings = updated
         let cached = await reservations.all()
         await rideReminderService.rescheduleAll(reservations: cached, settings: RideReminderSettings(enabled: updated.rideReminderEnabled, advanceMinutes: updated.rideReminderAdvanceMinutes))
+    }
+
+    func rideReminderPreference(for reservation: Reservation) -> RideReminderPreference? {
+        rideReminderService.preference(for: reservation)
+    }
+
+    func updateRideReminderPreference(
+        advanceMinutes: Int?,
+        for reservation: Reservation
+    ) async {
+        let currentSettings = settingsRepository.load()
+        let cached = await reservations.all()
+        await rideReminderService.updatePreference(
+            advanceMinutes: advanceMinutes,
+            for: reservation,
+            reservations: cached,
+            settings: RideReminderSettings(
+                enabled: currentSettings.rideReminderEnabled,
+                advanceMinutes: currentSettings.rideReminderAdvanceMinutes
+            )
+        )
     }
 
     func refreshRideReminderAuthorization() async {

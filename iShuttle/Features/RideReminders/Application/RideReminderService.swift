@@ -5,10 +5,12 @@ final class RideReminderService {
     private struct RescheduleRequest {
         let reservations: [Reservation]
         let settings: RideReminderSettings
+        let removesStalePreferences: Bool
     }
 
     private let scheduler: any RideReminderScheduler
     private let recordRepository: any RideReminderRecordRepository
+    private let preferenceRepository: any RideReminderPreferenceRepository
     private let now: () -> Date
     private let policy = RideReminderPolicy()
     private var pendingReschedule: RescheduleRequest?
@@ -17,10 +19,12 @@ final class RideReminderService {
     init(
         scheduler: any RideReminderScheduler,
         recordRepository: any RideReminderRecordRepository,
+        preferenceRepository: any RideReminderPreferenceRepository,
         now: @escaping () -> Date = Date.init
     ) {
         self.scheduler = scheduler
         self.recordRepository = recordRepository
+        self.preferenceRepository = preferenceRepository
         self.now = now
     }
 
@@ -32,8 +36,16 @@ final class RideReminderService {
         await scheduler.requestAuthorization()
     }
 
-    func rescheduleAll(reservations: [Reservation], settings: RideReminderSettings) async {
-        pendingReschedule = RescheduleRequest(reservations: reservations, settings: settings)
+    func rescheduleAll(
+        reservations: [Reservation],
+        settings: RideReminderSettings,
+        removesStalePreferences: Bool = false
+    ) async {
+        pendingReschedule = RescheduleRequest(
+            reservations: reservations,
+            settings: settings,
+            removesStalePreferences: removesStalePreferences
+        )
 
         let worker: Task<Void, Never>
         if let rescheduleWorker {
@@ -47,11 +59,42 @@ final class RideReminderService {
         await worker.value
     }
 
+    func preference(for reservation: Reservation) -> RideReminderPreference? {
+        guard let preference = preferencesByReservationID()[reservation.id],
+              preference.matches(reservation) else {
+            return nil
+        }
+        return preference
+    }
+
+    func updatePreference(
+        advanceMinutes: Int?,
+        for reservation: Reservation,
+        reservations: [Reservation],
+        settings: RideReminderSettings
+    ) async {
+        var preferences = preferencesByReservationID()
+        if let advanceMinutes {
+            preferences[reservation.id] = RideReminderPreference(
+                reservationID: reservation.id,
+                departure: reservation.departure,
+                advanceMinutes: min(max(advanceMinutes, 1), 60)
+            )
+        } else {
+            preferences.removeValue(forKey: reservation.id)
+        }
+        persistPreferences(preferences)
+        await rescheduleAll(reservations: reservations, settings: settings)
+    }
+
     func cancel(for reservation: Reservation) async {
         await scheduler.cancel(reservationID: reservation.id)
         var records = recordsByReservationID()
         records.removeValue(forKey: reservation.id)
         persist(records)
+        var preferences = preferencesByReservationID()
+        preferences.removeValue(forKey: reservation.id)
+        persistPreferences(preferences)
     }
 
     /// Stops future reminders while retaining records whose reminder time has
@@ -72,6 +115,7 @@ final class RideReminderService {
         await stopRescheduleWorker()
         await scheduler.cancelAll()
         recordRepository.removeAll()
+        preferenceRepository.removeAll()
     }
 
     private func stopRescheduleWorker() async {
@@ -93,6 +137,9 @@ final class RideReminderService {
 
     private func apply(_ request: RescheduleRequest) async {
         let currentDate = now()
+        if request.removesStalePreferences {
+            reconcilePreferences(with: request.reservations, at: currentDate)
+        }
 
         guard request.settings.enabled else {
             await reconcileDisabledState(at: currentDate)
@@ -131,9 +178,13 @@ final class RideReminderService {
 
         for reservation in request.reservations {
             guard !Task.isCancelled else { return }
+            let effectiveSettings = effectiveSettings(
+                for: reservation,
+                globalSettings: request.settings
+            )
             guard let triggerDate = policy.triggerDate(
                 for: reservation,
-                settings: request.settings,
+                settings: effectiveSettings,
                 now: currentDate
             ) else { continue }
 
@@ -160,7 +211,7 @@ final class RideReminderService {
                     content: reminderContent(
                         for: reservation,
                         triggerDate: triggerDate,
-                        settings: request.settings,
+                        settings: effectiveSettings,
                         now: currentDate
                     )
                 )
@@ -210,6 +261,38 @@ final class RideReminderService {
         return records
     }
 
+    private func effectiveSettings(
+        for reservation: Reservation,
+        globalSettings: RideReminderSettings
+    ) -> RideReminderSettings {
+        let advanceMinutes = preference(for: reservation)?.advanceMinutes
+            ?? globalSettings.advanceMinutes
+        return RideReminderSettings(
+            enabled: globalSettings.enabled,
+            advanceMinutes: advanceMinutes
+        )
+    }
+
+    private func reconcilePreferences(with reservations: [Reservation], at currentDate: Date) {
+        let reservationsByID = Dictionary(
+            reservations.map { ($0.id, $0) },
+            uniquingKeysWith: { _, latest in latest }
+        )
+        let preferences = preferencesByReservationID().filter { reservationID, preference in
+            guard let reservation = reservationsByID[reservationID] else { return false }
+            return preference.matches(reservation) && reservation.departure >= currentDate
+        }
+        persistPreferences(preferences)
+    }
+
+    private func preferencesByReservationID() -> [String: RideReminderPreference] {
+        var preferences: [String: RideReminderPreference] = [:]
+        for preference in preferenceRepository.load() {
+            preferences[preference.reservationID] = preference
+        }
+        return preferences
+    }
+
     private func persist(_ records: [String: RideReminderScheduleRecord]) {
         let values = records.values.sorted {
             if $0.reservationID == $1.reservationID {
@@ -218,6 +301,16 @@ final class RideReminderService {
             return $0.reservationID < $1.reservationID
         }
         recordRepository.save(values)
+    }
+
+    private func persistPreferences(_ preferences: [String: RideReminderPreference]) {
+        let values = preferences.values.sorted {
+            if $0.reservationID == $1.reservationID {
+                return $0.departure < $1.departure
+            }
+            return $0.reservationID < $1.reservationID
+        }
+        preferenceRepository.save(values)
     }
 
     private func datesMatch(_ lhs: Date, _ rhs: Date) -> Bool {

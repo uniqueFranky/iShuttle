@@ -62,7 +62,7 @@ struct SettingsView: View {
                         Button("去系统设置开启") { UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }
                     } else if rideReminderEnabled && container.rideReminderAuthorization == .authorized {
                         Stepper(
-                            "提前时长：\(rideReminderAdvanceMinutes) 分钟",
+                            "默认提前时长：\(rideReminderAdvanceMinutes) 分钟",
                             value: $rideReminderAdvanceMinutes,
                             in: 1...60,
                             step: 1
